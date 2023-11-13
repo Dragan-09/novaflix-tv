@@ -28,7 +28,7 @@ const navlinks = [
 
 function Navbar() {
   return (
-    <div className="navbar flex items-center uppercase h-[100px] bg-slate-50 py-5">
+    <div className="navbar flex items-center uppercase h-[100px] py-5">
       <div className="logo grow h-full">
         <Brand />
       </div>
@@ -38,7 +38,7 @@ function Navbar() {
       <div className="side-item">
         {/* Buttons */}
         <Button content="Sign in" color="text-primary" size="medium" style="outline" />
-        <Button content="request a demo" color="text-white" size="medium" style="filled" />
+        <Button content="Free Trial 24h" color="text-white" size="medium" style="filled" />
       </div>
     </div>
   )
