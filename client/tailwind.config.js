@@ -4,18 +4,18 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        'primary': '#1f75f6',
+        'primary': '#1e3a8a',
         'gray': '#9B9B9B',
-        'white': '#ffffff'
       },
       fontFamily: {
         'poppins': ['poppins', 'Arial']
       },
       backgroundImage: {
-        'hero-texture': "url('/public/images/hero.png')",
+        'hero-texture': "url('/images/hero.png')",
       },
     },
   },

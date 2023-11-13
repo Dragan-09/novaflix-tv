@@ -1,9 +1,9 @@
 import React from 'react'
-import brand from "../../../public/vite.svg"
+import brand from "/vite.svg"
 
 function Brand() {
   return (
-    <img src={brand} alt="" className='h-full' />
+    <img src={brand} alt="brand" className='h-full' />
   )
 }
 

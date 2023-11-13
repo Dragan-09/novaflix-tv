@@ -3,6 +3,11 @@ import Hero from '../components/organisms/hero'
 import Section from '../components/organisms/section'
 import CategoryCard from '../components/molecules/category-box'
 import PlanCard from '../components/molecules/plan-card'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { Autoplay } from 'swiper/modules'
+
+import 'swiper/css'
+import Footer from '../components/molecules/footer'
 
 function HomePage() {
   const categories = [
@@ -26,10 +31,10 @@ function HomePage() {
       name: "news",
       icon: "news"
     },
-    // {
-    //   name: "other",
-    //   icon: "other"
-    // }
+    {
+      name: "other",
+      icon: "other"
+    }
   ]
 
   const plans = [
@@ -66,18 +71,38 @@ function HomePage() {
     <>
       <Hero />
       <Section title="Content Categories" id="categories">
-        <div className="categories mt-5 grid grid-cols-5 gap-5 px-10">
-          {categories.map(category => <CategoryCard name={category.name} icon={category.icon} key={category.name} /> )}
+        <div className="categories mt-5 px-10">
+          <Swiper 
+            modules={[Autoplay]}
+            loop={true}
+            spaceBetween={50}
+            slidesPerView={4}
+            autoplay={{delay: 4000, disableOnInteraction:false}}
+            breakpoints={{
+              1281: {
+                slidesPerView: 5
+              }
+            }}
+          >
+            {categories.map(category => {
+              return (
+                <SwiperSlide>
+                  <CategoryCard name={category.name} icon={category.icon} key={category.name} />
+                </SwiperSlide>
+              )
+            })}
+          </Swiper>
         </div>
       </Section>
       <Section title="Plans" id="plans">
         <div className="plans container px-10 my-10 grid grid-cols-3">
           {plans.map(plan => {
             const {title, description, price, resubscription_description, icon, main} = plan
-            return <PlanCard title={title} description={description} price={price} resubdesc={resubscription_description} icon={icon} main={main} />
+            return <PlanCard key={title} title={title} description={description} price={price} resubdesc={resubscription_description} icon={icon} main={main} />
           })}
         </div>
       </Section>
+      <Footer />
     </>
   )
 }
