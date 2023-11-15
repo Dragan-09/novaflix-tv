@@ -9,11 +9,11 @@ const navlinks = [
     "url": "https://something.com"
   },
   {
-    "name": "Products",
+    "name": "Categories",
     "url": "https://something.com"
   },
   {
-    "name": "Features",
+    "name": "Plans",
     "url": "https://something.com"
   },
   {
@@ -28,16 +28,16 @@ const navlinks = [
 
 function Navbar() {
   return (
-    <div className="navbar flex items-center uppercase h-[100px] py-5">
+    <div className="navbar hidden sm:flex items-center uppercase h-[40px] sm:h-[100px] py-0 sm:py-5 ">
       <div className="logo grow h-full ps-5">
         <Brand />
       </div>
-      <div className="navlinks flex me-[150px] text-sm">
+      <div className="navlinks hidden sm:flex me-[150px] text-sm ">
         {navlinks.map((navlink, index) => <Navlink key={index} name={navlink.name} url={navlink.url} />)}
       </div>
-      <div className="side-item">
+      <div className="side-item hidden sm:block">
         {/* Buttons */}
-        <Button content="Register" color="white" size="medium" style="outline" />
+        <Button content="Register" color="white" size="medium" style="outline" link="/auth/register" />
         <Button content="Free Trial 24h" color="primary" size="medium" style="filled" />
       </div>
     </div>

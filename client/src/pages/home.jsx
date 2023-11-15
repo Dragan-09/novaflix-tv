@@ -4,10 +4,11 @@ import Section from '../components/organisms/section'
 import CategoryCard from '../components/molecules/category-box'
 import PlanCard from '../components/molecules/plan-card'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { Autoplay } from 'swiper/modules'
+import { Autoplay, Grid } from 'swiper/modules'
 
 import 'swiper/css'
 import Footer from '../components/molecules/footer'
+import BottomNavbar from '../components/molecules/bottom-navbar'
 
 function HomePage() {
   const categories = [
@@ -69,16 +70,24 @@ function HomePage() {
 
   return (
     <>
+      <BottomNavbar />
       <Hero />
       <Section title="Content Categories" id="categories">
-        <div className="categories mt-5 px-10">
+        <div className="categories mt-5 px-5 sm:px-10">
           <Swiper 
-            modules={[Autoplay]}
+            modules={[Autoplay, Grid]}
             loop={true}
-            spaceBetween={50}
-            slidesPerView={4}
-            autoplay={{delay: 4000, disableOnInteraction:false}}
+            spaceBetween={10}
+            slidesPerView={2}
+            autoplay={{delay: 2000, disableOnInteraction:false}}
             breakpoints={{
+              769: {
+                slidesPerView: 4,
+                spaceBetween: 50,
+                autoplay: {
+                  delay: 4000
+                }
+              },
               1281: {
                 slidesPerView: 5
               }

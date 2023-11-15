@@ -35,6 +35,26 @@ function Icon({height, width, className, icon, type, src}) {
     other: {
       type: "img",
       src: "images/icons/other.png",
+    },
+    categories: {
+      type: "img",
+      src: "images/icons/categories.png"
+    },
+    light: {
+      type: "img",
+      src: "images/icons/light.png"
+    },
+    dark: {
+      type: "img",
+      src: "images/icons/dark.png"
+    },
+    signin: {
+      type: "img",
+      src: "images/icons/signin.png"
+    },
+    home: {
+      type: "img",
+      src: "images/icons/home.png"
     }
   }
   let _icon = icons[icon]
@@ -53,6 +73,7 @@ function Icon({height, width, className, icon, type, src}) {
         {_icon.children}
       </svg>
     case "img":
+    default:
       return <img src={_icon.src} width={width} height={height} className={className} alt={icon} />
     }
 }

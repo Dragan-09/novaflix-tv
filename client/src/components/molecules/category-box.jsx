@@ -9,10 +9,10 @@ function CategoryCard({name, icon}) {
           icon={icon}
           type="img"
           width="100px"
-          className="fill-primary mx-auto dark:grayscale"
+          className="fill-primary mx-auto dark:grayscale w-[50px] sm:w-[100px]"
         />
       </div>
-      <div className="cat-name text-center text-primary uppercase text-xl font-medium pt-5 w-full dark:text-white">{name}</div>
+      <div className="cat-name text-center text-primary uppercase text-sm sm:text-xl font-medium pt-5 w-full dark:text-white">{name}</div>
     </div>
   )
 }

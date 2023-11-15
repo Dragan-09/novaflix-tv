@@ -4,7 +4,7 @@ import Auth from '../components/organisms/auth'
 
 function AuthPage() {
   return (
-    <div className="container mx-auto w-full h-screen flex align-center justify-center">
+    <div className="container mx-auto w-full h-screen flex items-center justify-center">
       <Auth />
     </div>
   )
