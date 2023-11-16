@@ -3,12 +3,13 @@ import Hero from '../components/organisms/hero'
 import Section from '../components/organisms/section'
 import CategoryCard from '../components/molecules/category-box'
 import PlanCard from '../components/molecules/plan-card'
-import { Swiper, SwiperSlide } from 'swiper/react'
-import { Autoplay, Grid } from 'swiper/modules'
-
-import 'swiper/css'
 import Footer from '../components/molecules/footer'
 import BottomNavbar from '../components/molecules/bottom-navbar'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { Autoplay, Grid, EffectCards } from 'swiper/modules'
+
+import 'swiper/css'
+import 'swiper/css/effect-cards';
 
 function HomePage() {
   const categories = [
@@ -77,6 +78,7 @@ function HomePage() {
           <Swiper 
             modules={[Autoplay, Grid]}
             loop={true}
+            grabCursor={true}
             spaceBetween={10}
             slidesPerView={2}
             autoplay={{delay: 2000, disableOnInteraction:false}}
@@ -104,11 +106,28 @@ function HomePage() {
         </div>
       </Section>
       <Section title="Plans" id="plans">
-        <div className="plans container px-10 my-10 grid grid-cols-3">
-          {plans.map(plan => {
-            const {title, description, price, resubscription_description, icon, main} = plan
-            return <PlanCard key={title} title={title} description={description} price={price} resubdesc={resubscription_description} icon={icon} main={main} />
-          })}
+        <div className="plans container px-10 my-10">
+          <Swiper 
+            modules={[EffectCards]}
+            slidesPerView={1}
+            effect='cards'
+            centeredSlides={true}
+            breakpoints={{
+              769: {
+                slidesPerView: 3,
+                spaceBetween: 50,
+                effect: "slide"
+              }
+            }}>
+            {plans.map(plan => {
+              const {title, description, price, resubscription_description, icon, main} = plan
+              return (
+                <SwiperSlide>
+                  <PlanCard key={title} title={title} description={description} price={price} resubdesc={resubscription_description} icon={icon} main={main} />
+                </SwiperSlide>
+              )
+            })}
+          </Swiper>
         </div>
       </Section>
       <Footer />

@@ -21,7 +21,7 @@ function BottomNavbar() {
     }
   ]
   return (
-    <div className="fixed bottom-0 flex sm:hidden bg-white h-14 w-screen z-20 grid grid-cols-5">
+    <div className="fixed bottom-0 left-0 flex sm:hidden bg-white h-14 w-screen z-20 grid grid-cols-5">
       {navlinks.map(navlink => {
         return (
           <a className="w-full h-14 flex items-center justify-center p-3" href={navlink.link}>

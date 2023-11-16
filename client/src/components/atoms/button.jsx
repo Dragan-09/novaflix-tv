@@ -15,7 +15,7 @@ function Button({style, color, size, content, className, link}) {
     style: {
       outline: `border rounded-md uppercase`,
       filled: `border border-primary rounded-md uppercase`,
-      rounded: "bg-gradient-to-tl from-primary to-[#94bfff] rounded-full uppercase text-white hover:text-white"
+      rounded: "bg-gradient-to-tl from-secondary to-primary rounded-full uppercase text-white hover:text-white"
     },
     size: {
       medium: "px-5 py-2 text-sm me-5",

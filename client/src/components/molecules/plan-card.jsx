@@ -4,7 +4,7 @@ import Button from '../atoms/button'
 
 function PlanCard({title, description, price, resubdesc, icon, main}) {
   return (
-    <div className={`plan shadow shadow-xl rounded-3xl p-10 w-[350px] text-center text-gray bg-white mx-auto dark:bg-slate-800 ${main ? "scale-110" : ""}`}>
+    <div className={`plan shadow shadow-xl rounded-3xl py-10 px-0 sm:px-10 sm:py-10 w-full text-center text-gray bg-white mx-auto dark:bg-slate-800 ${main ? "ssm:scale-110" : ""}`}>
       <div className="icon">
         <Icon icon={icon} width="100px" height="100px" className="mx-auto dark:grayscale" />
       </div>
