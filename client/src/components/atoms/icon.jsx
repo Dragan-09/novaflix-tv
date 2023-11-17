@@ -14,47 +14,47 @@ function Icon({height, width, className, icon, type, src}) {
     },
     sport: {
       type: "img",
-      src: "images/icons/sport.png",
+      src: "/images/icons/sport.png",
     },
     cuisine: {
       type: "img",
-      src: "images/icons/cuisine.png",
+      src: "/images/icons/cuisine.png",
     },
     movies: {
       type: "img",
-      src: "images/icons/movies.png",
+      src: "/images/icons/movies.png",
     },
     documentary: {
       type: "img",
-      src: "images/icons/documentary.png",
+      src: "/images/icons/documentary.png",
     },
     news: {
       type: "img",
-      src: "images/icons/news.png",
+      src: "/images/icons/news.png",
     },
     other: {
       type: "img",
-      src: "images/icons/other.png",
+      src: "/images/icons/other.png",
     },
     categories: {
       type: "img",
-      src: "images/icons/categories.png"
+      src: "/images/icons/categories.png"
     },
     light: {
       type: "img",
-      src: "images/icons/light.png"
+      src: "/images/icons/light.png"
     },
     dark: {
       type: "img",
-      src: "images/icons/dark.png"
+      src: "/images/icons/dark.png"
     },
     signin: {
       type: "img",
-      src: "images/icons/signin.png"
+      src: "/images/icons/signin.png"
     },
     home: {
       type: "img",
-      src: "images/icons/home.png"
+      src: "/images/icons/home.png"
     }
   }
   let _icon = icons[icon]

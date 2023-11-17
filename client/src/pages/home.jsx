@@ -1,43 +1,16 @@
 import React from 'react'
 import Hero from '../components/organisms/hero'
 import Section from '../components/organisms/section'
-import CategoryCard from '../components/molecules/category-box'
 import PlanCard from '../components/molecules/plan-card'
 import Footer from '../components/molecules/footer'
 import BottomNavbar from '../components/molecules/bottom-navbar'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { Autoplay, Grid, EffectCards } from 'swiper/modules'
+import { EffectCards } from 'swiper/modules'
 
-import 'swiper/css'
 import 'swiper/css/effect-cards';
+import 'swiper/css'
 
 function HomePage() {
-  const categories = [
-    {
-      name: "movies",
-      icon: "movies"
-    },
-    {
-      name: "sport",
-      icon: "sport"
-    },
-    {
-      name: "Cuisine",
-      icon: "cuisine"
-    },
-    {
-      name: "documentary",
-      icon: "documentary"
-    },
-    {
-      name: "news",
-      icon: "news"
-    },
-    {
-      name: "other",
-      icon: "other"
-    }
-  ]
 
   const plans = [
     {
@@ -73,49 +46,21 @@ function HomePage() {
     <>
       <BottomNavbar />
       <Hero />
-      <Section title="Content Categories" id="categories">
-        <div className="categories mt-5 px-5 sm:px-10">
-          <Swiper 
-            modules={[Autoplay, Grid]}
-            loop={true}
-            grabCursor={true}
-            spaceBetween={10}
-            slidesPerView={2}
-            autoplay={{delay: 2000, disableOnInteraction:false}}
-            breakpoints={{
-              769: {
-                slidesPerView: 4,
-                spaceBetween: 50,
-                autoplay: {
-                  delay: 4000
-                }
-              },
-              1281: {
-                slidesPerView: 5
-              }
-            }}
-          >
-            {categories.map(category => {
-              return (
-                <SwiperSlide>
-                  <CategoryCard name={category.name} icon={category.icon} key={category.name} />
-                </SwiperSlide>
-              )
-            })}
-          </Swiper>
-        </div>
-      </Section>
-      <Section title="Plans" id="plans">
-        <div className="plans container px-10 my-10">
+      <Section title="Get Yours Now" id="plans">
+        <div className="plans container px-5 md:px-10 my-5 md:my-10 w-full">
           <Swiper 
             modules={[EffectCards]}
-            slidesPerView={1}
             effect='cards'
-            centeredSlides={true}
+            spaceBetween={40}
             breakpoints={{
               769: {
-                slidesPerView: 3,
+                slidesPerView: 2,
                 spaceBetween: 50,
+                effect: "slide"
+              },
+              1024: {
+                slidesPerView: 3,
+                spaceBetween: 20,
                 effect: "slide"
               }
             }}>

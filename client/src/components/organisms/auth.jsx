@@ -19,7 +19,7 @@ function Auth() {
   }
 
   return (
-    <div className="auth w-[400px] text-primary dark:text-white p-10 bg-white dark:bg-slate-800 rounded-xl shadow-xl">
+    <div className="auth w-[400px] h-full sm:h-auto text-primary dark:text-white p-10 bg-white dark:bg-slate-800 rounded-xl shadow-xl">
       <div className="brand flex justify-center h-12 mb-10">
         <a href="/"><Brand /></a>
       </div>

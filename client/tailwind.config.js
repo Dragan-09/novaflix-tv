@@ -10,7 +10,6 @@ export default {
       colors: {
         'primary': '#2ecc71',
         'secondary': '#e67e22',
-        'gray': '#9B9B9B',
       },
       fontFamily: {
         'poppins': ['poppins', 'Arial']

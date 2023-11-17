@@ -6,7 +6,7 @@ import Input from '../atoms/input'
 function Footer() {
   const date = new Date().getFullYear()
   return (
-    <div className="footer p-10 bg-primary text-center px-5 sm:px-20 dark:bg-slate-950 border-t border-white">
+    <div className="footer p-10 bg-primary text-center px-5 sm:px-20 mb-14 sm:mb-0 dark:bg-slate-950 border-t border-white">
       <div className="footer-brand h-[50px] flex justify-center mb-5">
         <Brand />
       </div>
