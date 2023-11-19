@@ -6,5 +6,6 @@
 
 /* Custom Css */
 .plans .swiper-slide {
-  border-radius:1.5rem
+  border-radius:1.5rem;
+  width:80%
 }

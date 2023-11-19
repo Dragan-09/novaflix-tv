@@ -5,7 +5,7 @@ import PlanCard from '../components/molecules/plan-card'
 import Footer from '../components/molecules/footer'
 import BottomNavbar from '../components/molecules/bottom-navbar'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { EffectCards } from 'swiper/modules'
+import { Autoplay, EffectCards } from 'swiper/modules'
 
 import 'swiper/css/effect-cards';
 import 'swiper/css'
@@ -47,9 +47,10 @@ function HomePage() {
       <BottomNavbar />
       <Hero />
       <Section title="Get Yours Now" id="plans">
-        <div className="plans container px-5 md:px-10 my-5 md:my-10 w-full">
-          <Swiper 
-            modules={[EffectCards]}
+        <div className="plans container px-0 sm:px-5 md:px-10 my-5 md:my-10 w-full">
+          <Swiper
+            modules={[EffectCards, Autoplay]}
+            autoplay={{delay: 2000}}
             effect='cards'
             spaceBetween={40}
             breakpoints={{
@@ -64,10 +65,10 @@ function HomePage() {
                 effect: "slide"
               }
             }}>
-            {plans.map(plan => {
+            {plans.map((plan, index) => {
               const {title, description, price, resubscription_description, icon, main} = plan
               return (
-                <SwiperSlide>
+                <SwiperSlide key={index}>
                   <PlanCard key={title} title={title} description={description} price={price} resubdesc={resubscription_description} icon={icon} main={main} />
                 </SwiperSlide>
               )

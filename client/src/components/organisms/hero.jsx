@@ -42,7 +42,7 @@ function Hero() {
           </div>
           <div className="h-1/2">
             <div className="categories mt-5 px-5 sm:px-10">
-              <Swiper 
+              <Swiper
                 modules={[Autoplay]}
                 loop={true}
                 grabCursor={true}
@@ -68,7 +68,7 @@ function Hero() {
               >
                 {categories.map(category => {
                   return (
-                    <SwiperSlide>
+                    <SwiperSlide key={category.name}>
                       <CategoryCard name={category.name} icon={category.icon} key={category.name} />
                     </SwiperSlide>
                   )
@@ -80,7 +80,6 @@ function Hero() {
                 modules={[Autoplay]}
                 loop={true}
                 grabCursor={true}
-                reverseDirection={true}
                 spaceBetween={20}
                 slidesPerView={2}
                 autoplay={{delay: 3000, disableOnInteraction:false}}
@@ -101,10 +100,10 @@ function Hero() {
                   }
                 }}
               >
-                {channels.map(category => {
+                {channels.map(channel => {
                   return (
-                    <SwiperSlide>
-                      <ChannelCard name={category.name} icon={category.icon} key={category.name} />
+                    <SwiperSlide key={channel.name}>
+                      <ChannelCard name={channel.name} icon={channel.icon} key={channel.name} />
                     </SwiperSlide>
                   )
                 })}
