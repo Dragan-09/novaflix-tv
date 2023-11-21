@@ -36,7 +36,7 @@ function Hero() {
               <p className='sm:leading-tight text-md sm:text-5xl md:text-3xl text-white font-bold pt-2 capitalize'>Revolutioning your investments with</p>
               <p className='dark:text-gray-100 text-gray-50 italic text-xs sm:text-base pt-3 pb-6 font-medium hidden lg:block'>Say goodbye to traditional investing and hello to our cutting-edge app designed for modern investors</p>
               <div className="flex justify-center mt-5">
-                <Button style="filled" size="large" color="primary" content="Get 24 hours free" link="" className='shadow' />
+                <Button style="filled" size="large" color="primary" ink="" className='shadow'>Get 24 hours free</Button>
               </div>
             </div>
           </div>

@@ -27,7 +27,7 @@ function RegisterForm() {
         <Checkbox name="rememberme" /> <span className='text-sm ps-3'>Remember me</span>
       </div> */}
       <div className="submit col-span-2">
-        <Button content="Register" color="primary" size="medium" style="filled" className="w-full" />
+        <Button color="primary" size="medium" style="filled" className="w-full">Register</Button>
       </div>
       <p className='text-sm col-span-2 text-gray ps-3 text-center'>Already have an account? <a href="/auth/login" className='underline text-primary'>Sign in</a>.</p>
     </form>

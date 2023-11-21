@@ -13,7 +13,7 @@ function Footer() {
       <p className='text-2xl sm:text-3xl text-white font-semibold mb-5'>Unlimited email design.<br/>One low-priced subscription.</p>
       <p className='text-slate-300 text-xs'>Join the limitless newsletter to get updates, tips and excecutive deals available only to subscribers.</p>
       <div className="email-subscription pt-3">
-        <Button size="medium" style="filled" color="white" content="Register" link="/auth/register" />
+        <Button size="medium" style="filled" color="white" link="/auth/register">Register</Button>
       </div>
       <hr className='my-5 border-white/50'/>
       <div className='flex px-10 text-slate-300 grid grid-cols-2'>

@@ -1,6 +1,6 @@
 import React from 'react'
 
-function Button({style, color, size, content, className, link}) {
+function Button({style, color, size, content, className, link, children, onClick}) {
   const varillants = {
     color: {
       primary: {
@@ -32,8 +32,11 @@ function Button({style, color, size, content, className, link}) {
         _color = ["outline", "filled"].includes(style) ? varillants.color[color][style] : ""
 
   return (
-    <button className={`hover:bg-white hover:text-primary hover:border-white transition-all ease-in-out shadow ${_color} ${_style} ${_size} ${className}`}>
-      {link ? <a href={link}>{content}</a> : content}
+    <button 
+      className={`hover:bg-white hover:text-primary hover:border-white transition-all ease-in-out shadow ${_color} ${_style} ${_size} ${className}`}
+      onClick={onClick}
+    >
+      {link ? <a href={link}>{children}</a> : children}
     </button>
   )
 }

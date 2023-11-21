@@ -17,7 +17,7 @@ function LoginForm() {
         <span className='text-sm ps-3'>Remember me</span>
       </div>
       <div className="submit col-span-2">
-        <Button content="Sign in" color="primary" size="medium" style="filled" className="w-full" />
+        <Button color="primary" size="medium" style="filled" className="w-full">Sign in</Button>
       </div>
       <p className='text-sm col-span-2 text-gray ps-3 text-center'>Don't you have an account? <a href="/auth/register" className='underline text-primary'>Register</a>.</p>
     </form>

@@ -13,7 +13,7 @@ function PlanCard({title, description, price, resubdesc, icon, main}) {
       <hr className="my-10 mx-10"/>
       <div className={`price text-5xl font-light ${main ? "text-white dark:text-primary" : "text-primary dark:text-white"}`}>&#x24;{price}</div>
       <div className={`resubscription text-sm pb-10 ${main ? "text-gray-100 dark:text-gray-300" : "text-gray-300"}`}>{resubdesc}</div>
-      <Button size="large" style="rounded" color="text-white" content="Start Now" className={`${main ? "shadow shadow-xl shadow-secondary/70" : ""}`} />
+      <Button size="large" style="rounded" color="text-white" className={`${main ? "shadow shadow-xl shadow-secondary/70" : ""}`}>Start Now</Button>
     </div>
   )
 }

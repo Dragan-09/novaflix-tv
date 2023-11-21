@@ -4,8 +4,6 @@ import useTheme from '../../hooks/useTheme'
 import { ThemeContext } from '../../App'
 
 function BottomNavbar() {
-  // const [isDarkMode, toggleDarkMode] = useTheme()
-  // console.log(isDarkMode)
   const [isDarkMode, onToggleTheme] = useContext(ThemeContext)
   
   const navlinks = [
