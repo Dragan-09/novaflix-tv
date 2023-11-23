@@ -33,10 +33,10 @@ function Button({style, color, size, content, className, link, children, onClick
 
   return (
     <button 
-      className={`hover:bg-white hover:text-primary hover:border-white transition-all ease-in-out shadow ${_color} ${_style} ${_size} ${className}`}
+      className={`hover:bg-white hover:text-primary hover:border-white transition-all ease-in-out shadow inline-flex justify-center ${_color} ${_style} ${_size} ${className}`}
       onClick={onClick}
     >
-      {link ? <a href={link}>{children}</a> : children}
+      {link ? <a className='w-full' href={link}>{children}</a> : children}
     </button>
   )
 }

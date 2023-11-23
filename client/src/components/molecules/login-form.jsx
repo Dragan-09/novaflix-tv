@@ -5,7 +5,7 @@ import Button from '../atoms/button'
 
 function LoginForm() {
   return (
-    <form className='pt-7 grid grid-cols-2 gap-x-2 gap-y-4'>
+    <form className='grid grid-cols-2 gap-x-2 gap-y-4'>
       <div className="col-span-2">
         <Input type="login" placeholder="Username or Email" name="email" color="gray" />
       </div>
@@ -19,7 +19,7 @@ function LoginForm() {
       <div className="submit col-span-2">
         <Button color="primary" size="medium" style="filled" className="w-full">Sign in</Button>
       </div>
-      <p className='text-sm col-span-2 text-gray ps-3 text-center'>Don't you have an account? <a href="/auth/register" className='underline text-primary'>Register</a>.</p>
+      <p className='text-sm col-span-2 text-gray-500 ps-3 text-center'>Don't you have an account? <a href="/auth/register" className='underline text-primary'>Register</a>.</p>
     </form>
   )
 }

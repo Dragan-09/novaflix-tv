@@ -4,7 +4,7 @@ import Button from '../atoms/button'
 
 function RegisterForm() {
   return (
-    <form className='pt-7 grid grid-cols-2 gap-x-2 gap-y-4'>
+    <form className='grid grid-cols-2 gap-x-2 gap-y-4'>
       <div>
         <Input type="text" placeholder="First Name" name="first_name" color="gray" />
       </div>
@@ -29,7 +29,7 @@ function RegisterForm() {
       <div className="submit col-span-2">
         <Button color="primary" size="medium" style="filled" className="w-full">Register</Button>
       </div>
-      <p className='text-sm col-span-2 text-gray ps-3 text-center'>Already have an account? <a href="/auth/login" className='underline text-primary'>Sign in</a>.</p>
+      <p className='text-sm col-span-2 text-gray-500 ps-3 text-center'>Already have an account? <a href="/auth/login" className='underline text-primary'>Sign in</a>.</p>
     </form>
   )
 }

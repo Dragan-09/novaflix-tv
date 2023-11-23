@@ -3,6 +3,9 @@ import Brand from '../atoms/brand'
 import { useParams } from 'react-router-dom'
 import RegisterForm from '../molecules/register-form'
 import LoginForm from '../molecules/login-form'
+import ResetForm from '../molecules/resetForm'
+import EmailConfirmationForm from '../molecules/email-confirmation-form'
+import NewPasswordForm from '../molecules/new-password-form'
 
 function Auth() {
   const [auth, setAuth] = useState('login')
@@ -14,8 +17,22 @@ function Auth() {
     auths.includes(_auth) ? setAuth(_auth) : ''
   }, [])
 
-  const authFormHandler = _ => {
-    
+  let authForm
+  switch(_auth) {
+    case 'login':
+      authForm = <LoginForm />
+      break
+    case 'reset':
+      authForm = <ResetForm />
+      break
+    case 'confirm':
+      authForm = <EmailConfirmationForm />
+      break
+    case 'new-password':
+      authForm = <NewPasswordForm />
+      break
+  case 'register':
+      authForm = <RegisterForm />
   }
 
   return (
@@ -23,12 +40,14 @@ function Auth() {
       <div className="brand flex justify-center h-12 mb-10">
         <a href="/"><Brand /></a>
       </div>
-      <div className="auth-links flex justify-between">
-        {auths.map(auth => {
-          return <a href={`${auth}`} className={`mx-10 uppercase cursor-pointer ${_auth === auth ? "border-b border-primary dark:border-white" : ""}`}>{auth}</a>
-        })}
-      </div>
-      {auth === 'register' ? <RegisterForm /> : <LoginForm />}
+      {auths.includes(_auth) && (
+        <div className="auth-links flex justify-between pb-7">
+          {auths.map(auth => {
+            return <a href={`${auth}`} className={`mx-10 uppercase cursor-pointer ${_auth === auth ? "border-b border-primary dark:border-white" : ""}`}>{auth}</a>
+          })}
+        </div>
+      )}
+      {authForm}
     </div>
   )
 }
