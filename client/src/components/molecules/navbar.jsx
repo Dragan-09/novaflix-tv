@@ -48,7 +48,7 @@ function Navbar() {
         {/* <Button content="Register" color="primary" size="medium" style="outline" link="/auth/register" className='me-4'>Register</Button> */}
         <OutsideClickHandler onOutsideClick={_ => userInfoBoxHandler(true)}>
           <div className="relative me-4">
-            <Button color={"white"} size={"medium"} style={"filled"} className={""} onClick={_ => userInfoBoxHandler(showAccountInfo)} >
+            <Button color={"white"} size={"medium"} style={"filled"} className={""} onClick={_ => userInfoBoxHandler(showAccountInfo)}>
               <span>My Account</span>
             </Button>
             {
