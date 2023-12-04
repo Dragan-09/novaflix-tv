@@ -8,33 +8,72 @@ datasource db {
 }
 
 model User {
-  id          Int     @id @default(autoincrement())
-  username    String  @unique
-  email       String  @unique
-  password    String  
-  first_name  String  
-  last_name   String
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
-  plans       PlansOnUsers[]
+  id            Int       @id @default(autoincrement())
+  username      String    @unique
+  email         String    @unique
+  password      String  
+  first_name    String  
+  last_name     String
+  verified      Boolean   @default(false)
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+  plans         PlansOnUsers[]
+  verifications UserVerification[]
+
+  @@map("users")
 }
 
 model Plan {
   id                Int @id @default(autoincrement())
   name              String
   description       String
-  price             String
+  price             Float
   price_description String
+  duration_days     Int
   users             PlansOnUsers[]
+
+  @@map("plans")
 }
 
 model PlansOnUsers {
-  user User @relation(fields: [user_id], references: [id])
-  user_id Int
-  plan Plan @relation(fields: [plan_id], references: [id])
-  plan_id Int
-  duration Int
+  user_id     Int
+  plan_id     Int
+  status      Status       @default(ON_PROCESS)
   assigned_at DateTime @default(now())
+  ends_at     DateTime
 
+  user User @relation(fields: [user_id], references: [id])
+  plan Plan @relation(fields: [plan_id], references: [id])
   @@id([user_id, plan_id])
+}
+
+enum Status {
+  ON_PROCESS
+  ACTIVE
+  ENDED
+}
+
+model Category {
+  id    Int @id @default(autoincrement())
+  name  String
+
+  @@map("categories")
+}
+
+model Channel {
+  id    Int @id @default(autoincrement())
+  name  String
+  logo  String
+
+  @@map("channels")
+}
+
+model UserVerification {
+  encrypted_string  String @unique @default(uuid())
+  user_id           Int
+  created_at        DateTime @default(now())
+  expires_at        DateTime
+
+  user User @relation(fields: [user_id], references: [id])
+  @@map("users_verification")
 }
