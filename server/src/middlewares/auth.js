@@ -3,9 +3,7 @@ const jsonwebtoken = require("jsonwebtoken");
 const authentication = (req, res, next) => {
   const authorizationToken = req.headers.authorization;
   if (!authorizationToken || !authorizationToken.startsWith("Bearer ")) {
-    return res
-      .status(400)
-      .json({ message: "No authorization token provided!" });
+    return res.status(403).json({ message: "Unauthorized!" });
   }
   try {
     const decoded = jsonwebtoken.verify(
@@ -16,7 +14,7 @@ const authentication = (req, res, next) => {
     req.user = { id, username };
     next();
   } catch (e) {
-    return res.status(400).json({ message: "Not authorized!" });
+    return res.status(403).json({ message: "Unauthorized!" });
   }
 };
 

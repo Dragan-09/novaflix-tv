@@ -158,31 +158,39 @@ const account = async (req, res) => {
 const confirm = async (req, res) => {
   const token = req.params.token;
 
-  const verification = await prisma.userVerification.findFirst({
-    where: {
-      encrypted_string: token,
-      expires_at: { gt: now },
-    },
-  });
-
-  if (!verification)
-    return res.status(400).json({
-      message: "Confirmation Link has expired!",
+  try {
+    const verification = await prisma.userVerification.findFirst({
+      where: {
+        encrypted_string: token,
+        expires_at: { gt: now },
+      },
     });
 
-  const verifyUser = await prisma.user.update({
-    data: {
-      verified: true,
-    },
-    where: {
-      id: verification.user_id,
-    },
-  });
+    if (!verification)
+      return res.status(400).json({
+        message: "Confirmation Link has expired!",
+      });
 
-  if (!verifyUser)
-    return res.status(400).json({
-      message: "Account could not be verified!",
+    const verifyUser = await prisma.user.update({
+      data: {
+        verified: true,
+      },
+      where: {
+        id: verification.user_id,
+      },
     });
+
+    if (!verifyUser)
+      return res.status(400).json({
+        message: "Account could not be verified!",
+      });
+
+    const removeVerification = await prisma.userVerification.delete({
+      where: { encrypted_string: token },
+    });
+  } catch (e) {
+    return res.status(500).json({ message: "Something went wrong!" });
+  }
 
   return res.status(200).json({
     message: "Account Verified Successfully!",
