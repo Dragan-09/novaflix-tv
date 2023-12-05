@@ -5,6 +5,7 @@ const nodemailer = require("nodemailer");
 
 const prisma = new PrismaClient();
 const jwt_secret = process.env.JWT_SECRET;
+const now = new Date().toISOString();
 
 const transporter = nodemailer.createTransport({
   host: process.env.MAIL_HOST,
@@ -54,8 +55,9 @@ const register = async (req, res) => {
 
     try {
       const hashed_password = bcrypt.hashSync(password);
+      const currentTime = new Date().toISOString();
       const oneHourLater = new Date(
-        new Date().getTime() + 60 * 60 * 1000
+        new Date().getTime() + 60 * 120 * 1000
       ).toISOString();
 
       const create = await prisma.user.create({
@@ -131,7 +133,6 @@ const login = async (req, res) => {
 
 const account = async (req, res) => {
   const { id, username } = req.user;
-  const now = new Date().toISOString();
   const user = await prisma.user.findFirst({
     where: { id },
     select: {
@@ -154,8 +155,43 @@ const account = async (req, res) => {
   return res.status(200).json({ data: user });
 };
 
+const confirm = async (req, res) => {
+  const token = req.params.token;
+
+  const verification = await prisma.userVerification.findFirst({
+    where: {
+      encrypted_string: token,
+      expires_at: { gt: now },
+    },
+  });
+
+  if (!verification)
+    return res.status(400).json({
+      message: "Confirmation Link has expired!",
+    });
+
+  const verifyUser = await prisma.user.update({
+    data: {
+      verified: true,
+    },
+    where: {
+      id: verification.user_id,
+    },
+  });
+
+  if (!verifyUser)
+    return res.status(400).json({
+      message: "Account could not be verified!",
+    });
+
+  return res.status(200).json({
+    message: "Account Verified Successfully!",
+  });
+};
+
 module.exports = {
   register,
   login,
   account,
+  confirm,
 };
