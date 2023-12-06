@@ -55,7 +55,6 @@ const register = async (req, res) => {
 
     try {
       const hashed_password = bcrypt.hashSync(password);
-      const currentTime = new Date().toISOString();
       const oneHourLater = new Date(
         new Date().getTime() + 60 * 120 * 1000
       ).toISOString();

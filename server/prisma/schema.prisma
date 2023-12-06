@@ -29,9 +29,10 @@ model Plan {
   description       String
   price             Float
   price_description String
+  price_id          String
   duration_days     Int
-  users             PlansOnUsers[]
 
+  users             PlansOnUsers[]
   @@map("plans")
 }
 

@@ -11,6 +11,7 @@ const main = async () => {
         price: 4.98,
         price_description: "Pay every 30 days",
         duration_days: 30,
+        price_id: "price_1OKKcPDg6AgIuD6dWT5cbCBX",
       },
       {
         name: "Premium",
@@ -18,6 +19,7 @@ const main = async () => {
         price: 24.98,
         price_description: "Pay every year",
         duration_days: 365,
+        price_id: "price_1OKKcPDg6AgIuD6djN2aDekt",
       },
       {
         name: "Standard",
@@ -25,61 +27,62 @@ const main = async () => {
         price: 14.98,
         price_description: "Pay every 6 months",
         duration_days: 180,
+        price_id: "price_1OKKcPDg6AgIuD6ds1VeQPP2",
       },
     ],
   });
 
-  // const channels = await prisma.channel.createMany({
-  //   data: [
-  //     {
-  //       name: "Bein Sports",
-  //       logo: "channels/bein-sports.png",
-  //     },
-  //     {
-  //       name: "Netflix",
-  //       logo: "channels/netflix.png",
-  //     },
-  //     {
-  //       name: "Apple Tv",
-  //       logo: "channels/appple-tv.png",
-  //     },
-  //     {
-  //       name: "Prime Video",
-  //       logo: "channels/prime-video.png",
-  //     },
-  //     {
-  //       name: "Hulu",
-  //       logo: "channels/hulu.png",
-  //     },
-  //     {
-  //       name: "Formula 1",
-  //       logo: "channels/formula-1.png",
-  //     },
-  //   ],
-  // });
+  const channels = await prisma.channel.createMany({
+    data: [
+      {
+        name: "Bein Sports",
+        logo: "channels/bein-sports.png",
+      },
+      {
+        name: "Netflix",
+        logo: "channels/netflix.png",
+      },
+      {
+        name: "Apple Tv",
+        logo: "channels/appple-tv.png",
+      },
+      {
+        name: "Prime Video",
+        logo: "channels/prime-video.png",
+      },
+      {
+        name: "Hulu",
+        logo: "channels/hulu.png",
+      },
+      {
+        name: "Formula 1",
+        logo: "channels/formula-1.png",
+      },
+    ],
+  });
 
-  // const categories = await prisma.category.createMany({
-  //   data: [
-  //     {
-  //       name: "Movies",
-  //     },
-  //     {
-  //       name: "Sport",
-  //     },
-  //     {
-  //       name: "Cuisine",
-  //     },
-  //     {
-  //       name: "Documentary",
-  //     },
-  //     {
-  //       name: "News",
-  //     },
-  //     {
-  //       name: "Other",
-  //     },
-  //   ],
-  // });
+  const categories = await prisma.category.createMany({
+    data: [
+      {
+        name: "Movies",
+      },
+      {
+        name: "Sport",
+      },
+      {
+        name: "Cuisine",
+      },
+      {
+        name: "Documentary",
+      },
+      {
+        name: "News",
+      },
+      {
+        name: "Other",
+      },
+    ],
+  });
 };
 
 main()
