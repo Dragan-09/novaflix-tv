@@ -65,21 +65,27 @@ const main = async () => {
     data: [
       {
         name: "Movies",
+        icon: "movies",
       },
       {
         name: "Sport",
+        icon: "sport",
       },
       {
         name: "Cuisine",
+        icon: "cuisine",
       },
       {
         name: "Documentary",
+        icon: "documentary",
       },
       {
         name: "News",
+        icon: "news",
       },
       {
         name: "Other",
+        icon: "other",
       },
     ],
   });

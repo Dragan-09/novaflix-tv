@@ -1,5 +1,6 @@
 const express = require("express");
 const morgan = require("morgan");
+const cors = require("cors");
 require("dotenv").config();
 
 const app = express();
@@ -11,6 +12,11 @@ const category = require("./routes/category");
 const plan = require("./routes/plan");
 const user = require("./routes/user");
 
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL,
+  })
+);
 app.use(morgan("tiny"));
 app.use(express.urlencoded({ extended: "false" }));
 app.use(express.json());
