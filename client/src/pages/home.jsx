@@ -54,11 +54,13 @@ function HomePage() {
               }}
             >
               {plans.map((plan, index) => {
-                const { title, description, price, price_description } = plan;
+                const { id, title, description, price, price_description } =
+                  plan;
                 return (
                   <SwiperSlide key={index}>
                     <PlanCard
-                      key={title}
+                      key={id}
+                      id={id}
                       title={title}
                       description={description}
                       price={price}

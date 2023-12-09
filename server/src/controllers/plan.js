@@ -20,6 +20,7 @@ const getPlans = async (req, res) => {
     return res.status(200).json({
       data: plans.map((plan) => {
         return {
+          id: plan.id,
           name: plan.name,
           description: plan.description,
           price: plan.stripe_price.unit_amount / 100,

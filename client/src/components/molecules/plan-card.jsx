@@ -1,8 +1,26 @@
 import React from "react";
 import Icon from "../atoms/icon";
 import Button from "../atoms/button";
+import axios from "axios";
 
-function PlanCard({ title, description, price, resubdesc, icon, main }) {
+function PlanCard({ id, title, description, price, resubdesc, icon, main }) {
+  const purchase = async () => {
+    try {
+      const plan = await axios.post(
+        `${import.meta.env.VITE_API_URL}/plan/${id}`,
+        {},
+        {
+          headers: { Authorization: localStorage.getItem("Authorization") },
+        }
+      );
+      window.location.href = plan.data.checkout_url;
+    } catch (error) {
+      if (error.response.status === 403) {
+        window.location.href = "/auth/login";
+      }
+      console.log(error);
+    }
+  };
   return (
     <div
       className={`plan shadow shadow-xl rounded-3xl py-10 px-0 sm:px-10 sm:py-10 w-[80%] sm:w-full text-center text-gray mx-auto ${
@@ -51,6 +69,7 @@ function PlanCard({ title, description, price, resubdesc, icon, main }) {
         style="rounded"
         color="text-white"
         className={`${main ? "shadow shadow-xl shadow-secondary/70" : ""}`}
+        onClick={purchase}
       >
         Start Now
       </Button>

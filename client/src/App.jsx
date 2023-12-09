@@ -1,13 +1,14 @@
-import { useContext, createContext, useState } from 'react'
-import HomePage from './pages/home'
-import {BrowserRouter, Routes, Route} from 'react-router-dom'
-import AuthPage from './pages/auth'
-import useTheme from './hooks/useTheme'
-
-export const ThemeContext = createContext()
+import { createContext, useEffect } from "react";
+import HomePage from "./pages/home";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import AuthPage from "./pages/auth";
+import useTheme from "./hooks/useTheme";
+import useAuth from "./hooks/useAuth";
+export const ThemeContext = createContext();
 
 function App() {
-  let [isDarkMode, onToggleTheme] = useTheme()
+  let [isDarkMode, onToggleTheme] = useTheme();
+  useAuth();
   return (
     <ThemeContext.Provider value={[isDarkMode, onToggleTheme]}>
       <BrowserRouter>
@@ -17,7 +18,7 @@ function App() {
         </Routes>
       </BrowserRouter>
     </ThemeContext.Provider>
-  )
+  );
 }
 
-export default App
+export default App;
