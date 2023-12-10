@@ -1,6 +1,7 @@
 require("dotenv").config();
 const { PrismaClient } = require("@prisma/client");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+const now = new Date();
 
 const prisma = new PrismaClient();
 
@@ -46,9 +47,25 @@ const purchase = async (req, res) => {
       where: { id: req.user.id },
     });
 
-    console.log(process.env.FRONTEND_URL);
+    const subscriptions = await prisma.plansOnUsers.findMany({
+      where: {
+        plan_id: plan.id,
+        user_id: user.id,
+        ends_at: { gt: new Date() },
+      },
+      orderBy: { ends_at: "desc" },
+    });
+
+    console.log(subscriptions);
+
+    if (subscriptions.length > 0)
+      return res.status(400).json({
+        message: "You already have an active subscription!",
+        sub: subscriptions,
+      });
+
     const session = await stripe.checkout.sessions.create({
-      success_url: process.env.FRONTEND_URL,
+      success_url: `${process.env.BACKEND_URL}/api/subscribe/${plan_id}/${user.id}?session_id={CHECKOUT_SESSION_ID}`,
       customer_email: user.email,
       line_items: [
         {
@@ -68,4 +85,41 @@ const purchase = async (req, res) => {
   }
 };
 
-module.exports = { getPlans, purchase };
+const subscribe = async (req, res) => {
+  const { plan, user } = req.params;
+  const { session_id } = req.query;
+  if (plan && user && session_id) {
+    if (!isNaN(plan) && !isNaN(user) && typeof session_id === "string") {
+      try {
+        const session = await stripe.checkout.sessions.retrieve(session_id);
+        const subscription = await stripe.subscriptions.retrieve(
+          session.subscription
+        );
+        const subscribe = await prisma.plansOnUsers.create({
+          data: {
+            user_id: parseInt(user),
+            plan_id: parseInt(plan),
+            status: "ON_PROCESS",
+            subscription_id: session.subscription,
+            assigned_at: new Date(
+              subscription.current_period_start * 1000
+            ).toISOString(),
+            ends_at: new Date(
+              subscription.current_period_end * 1000
+            ).toISOString(),
+          },
+        });
+        return res.redirect(process.env.FRONTEND_URL);
+        // return res
+        //   .status(200)
+        //   .json({ message: "Subscription done successfully!" });
+      } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "Something went wrong!" });
+      }
+    }
+  }
+  return res.status(500).json({ message: "Something went wrong!" });
+};
+
+module.exports = { getPlans, purchase, subscribe };

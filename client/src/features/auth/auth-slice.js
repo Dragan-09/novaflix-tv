@@ -6,21 +6,21 @@ const authSlice = createSlice({
     isLoggedIn: false,
     full_name: null,
     username: null,
-    plans: null,
+    plan: null,
   },
   reducers: {
     login: (state, action) => {
-      const { first_name, last_name, plans, username } = action.payload;
+      const { first_name, last_name, plan, username } = action.payload;
       state.isLoggedIn = true;
       state.full_name = `${first_name} ${last_name}`;
       state.username = username;
-      state.plans = plans;
+      state.plan = plan;
     },
     logout: (state) => {
       state.isLoggedIn = false;
       state.full_name = null;
       state.username = null;
-      state.plans = null;
+      state.plan = null;
     },
   },
 });

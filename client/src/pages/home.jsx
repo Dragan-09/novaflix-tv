@@ -10,6 +10,7 @@ import { Autoplay, EffectCards } from "swiper/modules";
 
 import "swiper/css/effect-cards";
 import "swiper/css";
+import { Toaster } from "react-hot-toast";
 
 function HomePage() {
   const [loading, setLoading] = useState(true);
@@ -31,6 +32,7 @@ function HomePage() {
   return (
     !loading && (
       <>
+        <Toaster />
         <BottomNavbar />
         <Hero />
         <Section title="Get Yours Now" id="plans">

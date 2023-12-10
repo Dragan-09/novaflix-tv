@@ -2,6 +2,7 @@ import React from "react";
 import Icon from "../atoms/icon";
 import Button from "../atoms/button";
 import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 
 function PlanCard({ id, title, description, price, resubdesc, icon, main }) {
   const purchase = async () => {
@@ -17,6 +18,9 @@ function PlanCard({ id, title, description, price, resubdesc, icon, main }) {
     } catch (error) {
       if (error.response.status === 403) {
         window.location.href = "/auth/login";
+      }
+      if (error.response.status === 400) {
+        toast.error(error.response.data.message, { position: "top-center" });
       }
       console.log(error);
     }

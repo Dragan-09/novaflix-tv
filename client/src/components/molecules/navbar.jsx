@@ -8,6 +8,7 @@ import UserDropdown from "./user-dropdown";
 import { useState } from "react";
 import OutsideClickHandler from "react-outside-click-handler";
 import { useSelector } from "react-redux";
+import { current } from "@reduxjs/toolkit";
 
 const navlinks = [
   {
@@ -40,8 +41,8 @@ function Navbar() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const full_name = useSelector((state) => state.auth.full_name);
   const username = useSelector((state) => state.auth.username);
-  const plans = useSelector((state) => state.plans);
-  console.log(isLoggedIn);
+  const current_plan = useSelector((state) => state.auth.plan);
+  console.log(current_plan);
   return (
     <div className="navbar hidden md:flex items-center h-[40px] sm:h-[100px] py-0 sm:py-5 ">
       <div className="logo h-full aspect-square ms-5">
@@ -84,11 +85,13 @@ function Navbar() {
                   <UserDropdown
                     full_name={full_name}
                     username={username}
-                    current_plan={{
-                      name: "Premium",
-                      end_date: "2024-04-24",
-                      status: "ACTIVE",
-                    }}
+                    current_plan={
+                      current_plan && {
+                        name: current_plan.name,
+                        end_date: current_plan.ends_at.split("T")[0],
+                        status: current_plan.status,
+                      }
+                    }
                   />
                 </div>
               )}

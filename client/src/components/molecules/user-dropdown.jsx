@@ -9,21 +9,24 @@ function UserDropdown({ full_name, username, current_plan }) {
     Math.floor((new Date() - new Date(current_plan.end_date)) / 8.64e7)
   );
   const handleLogout = logoutUtil();
-  let statusColor, description;
+  let statusColor, description, plan_name;
   let isPinging = true;
   switch (current_plan.status) {
     case "ACTIVE":
       statusColor = "#2ecc71";
       description = `Ends in ${end_date_format}, ${diff_days} days remaining`;
+      plan_name = `${current_plan.name} Plan`;
       break;
     case "ON_PROCESS":
       statusColor = "#1f75f6";
       description = "On Process...";
+      plan_name = `${current_plan.name} Plan`;
       break;
     default:
       statusColor = "gray";
       isPinging = false;
       description = "Check our plans for more infrmation";
+      plan_name = "No Plan Chosen";
   }
   return (
     <div className="w-[300px] bg-white py-2 px-4 rounded-md relative z-10 shadow-lg animate-display">
@@ -37,7 +40,7 @@ function UserDropdown({ full_name, username, current_plan }) {
         </div>
         <div className="w-full ps-0.5">
           <div className="w-full font-semibold text-lg flex justify-between items-center">
-            <span>{current_plan.name} Plan</span>
+            <span>{plan_name}</span>
             <span
               className="block w-[10px] h-[10px] bg-active rounded-full"
               style={{ backgroundColor: statusColor }}
