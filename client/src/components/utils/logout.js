@@ -8,6 +8,7 @@ function logoutUtil() {
   const logout = () => {
     dispatch(authActions.logout());
     localStorage.removeItem("Authorization");
+    window.location.href = "/";
   };
 
   return logout;

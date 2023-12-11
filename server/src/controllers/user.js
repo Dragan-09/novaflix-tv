@@ -3,7 +3,13 @@ const { PrismaClient } = require("@prisma/client");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({
+  log: [
+    {
+      level: "query",
+    },
+  ],
+});
 const jwt_secret = process.env.JWT_SECRET;
 const now = new Date();
 

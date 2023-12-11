@@ -1,18 +1,36 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { darkModeActions } from "../features/dark-mode/dark-mode-slice";
 
 function useTheme() {
-  let [isDarkMode, setIsDarkMode] = useState(localStorage.getItem('dark-mode') === 'dark' ? true : false)
+  const dispatch = useDispatch();
+  const currentMode = localStorage.getItem("dark-mode");
+  const isDarkMode = useSelector((state) => state.mode.isDarkMode);
 
-  const toggleDarkMode = currentStatus => {
-    setIsDarkMode(!currentStatus)
-    localStorage.setItem('dark-mode', currentStatus === true ? 'light' : 'dark')
-  }
+  const toggleDarkMode = () => {
+    if (isDarkMode) {
+      dispatch(darkModeActions.lightMode());
+      localStorage.setItem("dark-mode", "light");
+      document.documentElement.classList.remove("dark");
+    } else {
+      dispatch(darkModeActions.darkMode());
+      localStorage.setItem("dark-mode", "dark");
+      document.documentElement.classList.add("dark");
+    }
+  };
 
-  useEffect(_ => {
-    isDarkMode === true ? document.documentElement.classList.add('dark') : document.documentElement.classList.remove('dark')
-  }, [isDarkMode])
+  useEffect((_) => {
+    if (currentMode === "dark") {
+      dispatch(darkModeActions.darkMode());
+      document.documentElement.classList.add("dark");
+    } else {
+      dispatch(darkModeActions.lightMode());
+      document.documentElement.classList.remove("dark");
+    }
+  }, []);
 
-  return [isDarkMode, toggleDarkMode]
+  return [toggleDarkMode];
 }
 
-export default useTheme
+export default useTheme;

@@ -6,27 +6,39 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import ChannelCard from "../molecules/channel-box";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 function Hero() {
   const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState([]);
   const [channels, setChannels] = useState([]);
-  // const categories = [
-  //   { name: "movies", icon: "movies" },
-  //   { name: "sport", icon: "sport" },
-  //   { name: "cuisine", icon: "cuisine" },
-  //   { name: "documentary", icon: "documentary" },
-  //   { name: "news", icon: "news" },
-  //   { name: "other", icon: "other" },
-  // ];
-  // const channels = [
-  //   { name: "bein sports", icon: "/images/channels/bein.webp" },
-  //   { name: "f1", icon: "/images/channels/f1.webp" },
-  //   { name: "hulu", icon: "/images/channels/hulu.webp" },
-  //   { name: "netflix", icon: "/images/channels/netflix.webp" },
-  //   { name: "prime video", icon: "/images/channels/prime.webp" },
-  //   { name: "apple tv", icon: "/images/channels/appletv.webp" },
-  // ];
+
+  const try24h = async () => {
+    toast.promise(
+      axios.post(
+        `${import.meta.env.VITE_API_URL}/trial`,
+        {},
+        {
+          headers: {
+            Authorization: localStorage.getItem("Authorization"),
+          },
+        }
+      ),
+      {
+        loading: "Creating...",
+        success: (data) => data.data.message,
+        error: (error) => {
+          if (error.response.status === 400) {
+            return error.response.data.message;
+          }
+          if (error.response.status === 403) {
+            window.location.href = "/auth/login";
+            return "Please Sign in / Register!";
+          }
+        },
+      }
+    );
+  };
 
   useEffect(() => {
     return async () => {
@@ -45,6 +57,7 @@ function Hero() {
       }
     };
   }, []);
+
   return (
     loading || (
       <div className="hero border-b-2 border-slate-800 dark:border-white w-full h-[calc(100vh-55px)] sm:h-screen sm:min-h-[800px] pt-10 px-0 sm:px-2 lg:px-5 bg-gradient-to-r from-primary to-secondary relative overflow-hidden">
@@ -72,6 +85,7 @@ function Hero() {
                     color="primary"
                     ink=""
                     className="shadow"
+                    onClick={try24h}
                   >
                     Get 24 hours free
                   </Button>

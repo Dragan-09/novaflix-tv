@@ -2,13 +2,12 @@ import React, { useContext } from "react";
 import Navlink from "../atoms/navlink";
 import Button from "../atoms/button";
 import Brand from "../atoms/brand";
-import { ThemeContext } from "../../App";
 import Icon from "../atoms/icon";
 import UserDropdown from "./user-dropdown";
 import { useState } from "react";
 import OutsideClickHandler from "react-outside-click-handler";
 import { useSelector } from "react-redux";
-import { current } from "@reduxjs/toolkit";
+import useTheme from "../../hooks/useTheme";
 
 const navlinks = [
   {
@@ -34,15 +33,17 @@ const navlinks = [
 ];
 
 function Navbar() {
-  const [isDarkMode, toggleDarkMode] = useContext(ThemeContext);
-  const [showAccountInfo, setShowAccountInfo] = useState(false);
-  const userInfoBoxHandler = (currentStatus) =>
-    setShowAccountInfo(!currentStatus);
+  const isDarkMode = useSelector((state) => state.mode.isDarkMode);
+  const [showAccount, setShowAccount] = useState(false);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  const full_name = useSelector((state) => state.auth.full_name);
-  const username = useSelector((state) => state.auth.username);
-  const current_plan = useSelector((state) => state.auth.plan);
-  console.log(current_plan);
+  const userInfoBoxHandler = (currentStatus) => setShowAccount(!currentStatus);
+  const [toggleDarkMode] = useTheme();
+  const {
+    full_name,
+    username,
+    plan: current_plan,
+  } = useSelector((state) => state.auth.account);
+
   return (
     <div className="navbar hidden md:flex items-center h-[40px] sm:h-[100px] py-0 sm:py-5 ">
       <div className="logo h-full aspect-square ms-5">
@@ -76,11 +77,11 @@ function Navbar() {
                 size={"medium"}
                 style={"filled"}
                 className={""}
-                onClick={(_) => userInfoBoxHandler(showAccountInfo)}
+                onClick={(_) => userInfoBoxHandler(showAccount)}
               >
                 <span>My Account</span>
               </Button>
-              {showAccountInfo && (
+              {showAccount && (
                 <div className="absolute top-full right-0 pt-2">
                   <UserDropdown
                     full_name={full_name}
@@ -103,12 +104,12 @@ function Navbar() {
           size="medium"
           style={"filled"}
           className="me-4"
-          onClick={(_) => toggleDarkMode(isDarkMode)}
+          onClick={(_) => toggleDarkMode()}
         >
           {isDarkMode ? (
-            <Icon icon={"light"} className={"h-[20px]"} />
+            <Icon icon={"light"} width={20} className={"h-[20px]"} />
           ) : (
-            <Icon icon={"dark"} className={"h-[20px]"} />
+            <Icon icon={"dark"} width={20} className={"h-[20px]"} />
           )}
         </Button>
       </div>

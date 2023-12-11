@@ -49,7 +49,6 @@ const purchase = async (req, res) => {
 
     const subscriptions = await prisma.plansOnUsers.findMany({
       where: {
-        plan_id: plan.id,
         user_id: user.id,
         ends_at: { gt: new Date() },
       },
@@ -122,4 +121,52 @@ const subscribe = async (req, res) => {
   return res.status(500).json({ message: "Something went wrong!" });
 };
 
-module.exports = { getPlans, purchase, subscribe };
+const trial = async (req, res) => {
+  const { id: user } = req.user;
+  try {
+    const subscriptions = await prisma.plansOnUsers.findFirst({
+      where: {
+        user_id: user,
+        ends_at: { gt: new Date() },
+      },
+      orderBy: { ends_at: "desc" },
+    });
+
+    if (subscriptions)
+      return res
+        .status(400)
+        .json({ message: "You already have an active plan!" });
+
+    const trial = await prisma.plansOnUsers.findFirst({
+      where: {
+        user_id: user,
+        type: "TRIAL",
+      },
+    });
+
+    if (trial)
+      return res
+        .status(400)
+        .json({ message: "You can not have the free trial more than once!" });
+
+    const setTrial = await prisma.plansOnUsers.create({
+      data: {
+        user_id: user,
+        plan_id: 2,
+        status: "ON_PROCESS",
+        ends_at: new Date(
+          new Date().getTime() + 60 * 60 * 1000 * 24
+        ).toISOString(),
+        type: "TRIAL",
+      },
+    });
+
+    return res
+      .status(200)
+      .json({ message: "Congratulations! You got the 24 hours trial." });
+  } catch (error) {
+    return res.status(500).json({ message: "Something went wrong!" });
+  }
+};
+
+module.exports = { getPlans, purchase, subscribe, trial };
