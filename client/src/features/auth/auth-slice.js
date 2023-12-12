@@ -4,6 +4,7 @@ const authSlice = createSlice({
   name: "auth",
   initialState: {
     isLoggedIn: false,
+    showAccount: false,
     account: {
       full_name: null,
       username: null,
@@ -27,6 +28,19 @@ const authSlice = createSlice({
         username: null,
         plan: null,
       };
+    },
+    toggleShowAccount: (state) => {
+      state.showAccount = !state.showAccount;
+    },
+    hideAccount: (state) => {
+      if (state.showAccount) {
+        state.showAccount = false;
+      }
+    },
+    showAccount: (state) => {
+      if (!state.showAccount) {
+        state.showAccount = true;
+      }
     },
   },
 });

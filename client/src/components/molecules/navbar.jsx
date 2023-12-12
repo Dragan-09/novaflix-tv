@@ -4,10 +4,10 @@ import Button from "../atoms/button";
 import Brand from "../atoms/brand";
 import Icon from "../atoms/icon";
 import UserDropdown from "./user-dropdown";
-import { useState } from "react";
 import OutsideClickHandler from "react-outside-click-handler";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import useTheme from "../../hooks/useTheme";
+import { authActions } from "../../features/auth/auth-slice";
 
 const navlinks = [
   {
@@ -34,9 +34,10 @@ const navlinks = [
 
 function Navbar() {
   const isDarkMode = useSelector((state) => state.mode.isDarkMode);
-  const [showAccount, setShowAccount] = useState(false);
+  const showAccount = useSelector((state) => state.auth.showAccount);
+  const dispatch = useDispatch();
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  const userInfoBoxHandler = (currentStatus) => setShowAccount(!currentStatus);
+  // const userInfoBoxHandler = (currentStatus) => setShowAccount(!currentStatus);
   const [toggleDarkMode] = useTheme();
   const {
     full_name,
@@ -70,14 +71,16 @@ function Navbar() {
             </Button>
           </>
         ) : (
-          <OutsideClickHandler onOutsideClick={(_) => userInfoBoxHandler(true)}>
+          <OutsideClickHandler
+            onOutsideClick={() => dispatch(authActions.hideAccount(false))}
+          >
             <div className="relative me-4">
               <Button
                 color={"white"}
                 size={"medium"}
                 style={"filled"}
                 className={""}
-                onClick={(_) => userInfoBoxHandler(showAccount)}
+                onClick={() => dispatch(authActions.toggleShowAccount())}
               >
                 <span>My Account</span>
               </Button>

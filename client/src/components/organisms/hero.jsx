@@ -7,38 +7,18 @@ import { Autoplay } from "swiper/modules";
 import ChannelCard from "../molecules/channel-box";
 import axios from "axios";
 import toast from "react-hot-toast";
+import refreshAccountUtil from "../utils/refresh-account";
+import { useDispatch, useSelector } from "react-redux";
+import { authActions } from "../../features/auth/auth-slice";
+import FreeTrial from "../molecules/free-trial";
 
 function Hero() {
   const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState([]);
   const [channels, setChannels] = useState([]);
-
-  const try24h = async () => {
-    toast.promise(
-      axios.post(
-        `${import.meta.env.VITE_API_URL}/trial`,
-        {},
-        {
-          headers: {
-            Authorization: localStorage.getItem("Authorization"),
-          },
-        }
-      ),
-      {
-        loading: "Creating...",
-        success: (data) => data.data.message,
-        error: (error) => {
-          if (error.response.status === 400) {
-            return error.response.data.message;
-          }
-          if (error.response.status === 403) {
-            window.location.href = "/auth/login";
-            return "Please Sign in / Register!";
-          }
-        },
-      }
-    );
-  };
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const account = useSelector((state) => state.auth.account);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     return async () => {
@@ -79,16 +59,18 @@ function Hero() {
                   cutting-edge app designed for modern investors
                 </p>
                 <div className="flex justify-center mt-5">
-                  <Button
-                    style="filled"
-                    size="large"
-                    color="primary"
-                    ink=""
-                    className="shadow"
-                    onClick={try24h}
-                  >
-                    Get 24 hours free
-                  </Button>
+                  {isLoggedIn && account.plan ? (
+                    <Button
+                      style={"filled"}
+                      color={"white"}
+                      size={"large"}
+                      onClick={() => dispatch(authActions.showAccount())}
+                    >
+                      My Account
+                    </Button>
+                  ) : (
+                    <FreeTrial />
+                  )}
                 </div>
               </div>
             </div>

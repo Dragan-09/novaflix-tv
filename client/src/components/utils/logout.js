@@ -8,7 +8,7 @@ function logoutUtil() {
   const logout = () => {
     dispatch(authActions.logout());
     localStorage.removeItem("Authorization");
-    window.location.href = "/";
+    window.location.href = "/auth/login";
   };
 
   return logout;

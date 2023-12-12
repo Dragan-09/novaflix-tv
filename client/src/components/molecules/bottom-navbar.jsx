@@ -1,14 +1,16 @@
 import React, { useContext, useState } from "react";
 import Icon from "../atoms/icon";
 import useTheme from "../../hooks/useTheme";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import UserDropdown from "./user-dropdown";
+import { authActions } from "../../features/auth/auth-slice";
 
 function BottomNavbar() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  const [showAccount, setShowAccount] = useState(false);
+  const showAccount = useSelector((state) => state.auth.showAccount);
   const isDarkMode = useSelector((state) => state.mode.isDarkMode);
   const [toggleDarkMode] = useTheme();
+  const dispatch = useDispatch();
   const {
     full_name,
     username,
@@ -27,7 +29,7 @@ function BottomNavbar() {
       name: "signin",
       icon: isLoggedIn ? "user" : "signin",
       link: !isLoggedIn && "/auth/login",
-      onClick: isLoggedIn && (() => setShowAccount(!showAccount)),
+      onClick: isLoggedIn && (() => dispatch(authActions.toggleShowAccount())),
     },
   ];
 
@@ -35,6 +37,7 @@ function BottomNavbar() {
     <>
       {showAccount && (
         <UserDropdown
+          className={"sm:hidden"}
           full_name={full_name}
           username={username}
           current_plan={

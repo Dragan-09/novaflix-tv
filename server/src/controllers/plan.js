@@ -94,6 +94,14 @@ const subscribe = async (req, res) => {
         const subscription = await stripe.subscriptions.retrieve(
           session.subscription
         );
+
+        const manual_subscription = await stripe.subscriptions.update(
+          session.subscription,
+          {
+            cancel_at_period_end: true,
+          }
+        );
+
         const subscribe = await prisma.plansOnUsers.create({
           data: {
             user_id: parseInt(user),
@@ -161,9 +169,9 @@ const trial = async (req, res) => {
       },
     });
 
-    return res
-      .status(200)
-      .json({ message: "Congratulations! You got the 24 hours trial." });
+    return res.status(200).json({
+      message: "Congratulations! You got the 24 hours trial. Check you email!",
+    });
   } catch (error) {
     return res.status(500).json({ message: "Something went wrong!" });
   }

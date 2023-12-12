@@ -20,7 +20,6 @@ export default function useAuth() {
           }
         );
         if (user) dispatch(authActions.login(user.data.data));
-        console.log(user.data.data);
       } catch (error) {
         dispatch(authActions.logout());
       }
