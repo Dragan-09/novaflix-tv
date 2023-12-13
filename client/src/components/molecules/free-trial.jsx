@@ -19,6 +19,8 @@ function FreeTrial() {
       }
     );
 
+    new URLSearchParams().set("congrats", "trial");
+
     toast.promise(trial, {
       loading: "Processing",
       success: (data) => {
@@ -49,7 +51,7 @@ function FreeTrial() {
       }
     >
       {(close) => (
-        <div className="modal w-1/2 bg-white p-8 rounded-lg text-center mx-auto shadow-xl border-2 border-dashed border-primary dark:bg-slate-800">
+        <div className="modal w-11/12 sm:w-1/2 bg-white p-8 rounded-lg text-center mx-auto shadow-xl border-2 border-dashed border-primary dark:bg-slate-800">
           <div className="header text-2xl font-bold mb-2 text-primary dark:text-white">
             Free Trial
           </div>

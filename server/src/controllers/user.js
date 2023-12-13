@@ -204,6 +204,8 @@ const confirm = async (req, res) => {
     const removeVerification = await prisma.userVerification.delete({
       where: { encrypted_string: token },
     });
+
+    if (removeVerification) res.redirect(`${process.env.FRONTEND_URL}`);
   } catch (e) {
     return res.status(500).json({ message: "Something went wrong!" });
   }

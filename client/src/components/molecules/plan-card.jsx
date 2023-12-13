@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import Icon from "../atoms/icon";
 import Button from "../atoms/button";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 
 function PlanCard({ id, title, description, price, resubdesc, icon, main }) {
+  const [isProcessing, setIsProcessing] = useState(false);
   const purchase = async () => {
     try {
+      setIsProcessing(true);
       const plan = await axios.post(
         `${import.meta.env.VITE_API_URL}/plan/${id}`,
         {},
@@ -23,6 +25,8 @@ function PlanCard({ id, title, description, price, resubdesc, icon, main }) {
         toast.error(error.response.data.message, { position: "top-center" });
       }
       console.log(error);
+    } finally {
+      setIsProcessing(false);
     }
   };
   return (
@@ -75,7 +79,7 @@ function PlanCard({ id, title, description, price, resubdesc, icon, main }) {
         className={`${main ? "shadow shadow-xl shadow-secondary/70" : ""}`}
         onClick={purchase}
       >
-        Start Now
+        {isProcessing ? "Processing..." : "Start Now"}
       </Button>
     </div>
   );

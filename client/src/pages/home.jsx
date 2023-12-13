@@ -8,6 +8,8 @@ import BottomNavbar from "../components/molecules/bottom-navbar";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, EffectCards } from "swiper/modules";
 import { Toaster } from "react-hot-toast";
+import Confetti from "react-confetti";
+import { useWindowSize } from "@uidotdev/usehooks";
 
 import "swiper/css/effect-cards";
 import "swiper/css";
@@ -15,6 +17,8 @@ import "swiper/css";
 function HomePage() {
   const [loading, setLoading] = useState(true);
   const [plans, setPlans] = useState([]);
+  const isCelebrating = new URLSearchParams(location.search).get("congrats");
+  const { width, height } = useWindowSize();
 
   useEffect(() => {
     return async () => {
@@ -32,6 +36,18 @@ function HomePage() {
   return (
     !loading && (
       <>
+        {isCelebrating && (
+          <Confetti
+            width={width}
+            height={height}
+            style={{ zIndex: 30, position: "fixed" }}
+            recycle={false}
+            numberOfPieces={500}
+            gravity={0.04}
+            tweenDuration={20000}
+            initialVelocityY={1}
+          />
+        )}
         <Toaster
           toastOptions={{
             style: {

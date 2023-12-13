@@ -50,21 +50,29 @@ const purchase = async (req, res) => {
     const subscriptions = await prisma.plansOnUsers.findMany({
       where: {
         user_id: user.id,
-        ends_at: { gt: new Date() },
+        AND: [
+          {
+            ends_at: { gt: new Date() },
+          },
+          {
+            NOT: {
+              status: "ENDED",
+            },
+          },
+        ],
       },
       orderBy: { ends_at: "desc" },
     });
 
-    console.log(subscriptions);
-
     if (subscriptions.length > 0)
       return res.status(400).json({
-        message: "You already have an active subscription!",
+        message: "You already have an active plan!",
         sub: subscriptions,
       });
 
     const session = await stripe.checkout.sessions.create({
       success_url: `${process.env.BACKEND_URL}/api/subscribe/${plan_id}/${user.id}?session_id={CHECKOUT_SESSION_ID}`,
+      // return_url: process.env.FRONTEND_URL,
       customer_email: user.email,
       line_items: [
         {
@@ -116,7 +124,9 @@ const subscribe = async (req, res) => {
             ).toISOString(),
           },
         });
-        return res.redirect(process.env.FRONTEND_URL);
+        return res.redirect(
+          `${process.env.FRONTEND_URL}/?congrats=subscription`
+        );
         // return res
         //   .status(200)
         //   .json({ message: "Subscription done successfully!" });
@@ -131,6 +141,7 @@ const subscribe = async (req, res) => {
 
 const trial = async (req, res) => {
   const { id: user } = req.user;
+  console.log(user);
   try {
     const subscriptions = await prisma.plansOnUsers.findFirst({
       where: {
@@ -173,6 +184,7 @@ const trial = async (req, res) => {
       message: "Congratulations! You got the 24 hours trial. Check you email!",
     });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ message: "Something went wrong!" });
   }
 };

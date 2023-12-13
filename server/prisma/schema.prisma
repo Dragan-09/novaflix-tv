@@ -37,6 +37,7 @@ model Plan {
 }
 
 model PlansOnUsers {
+  id          String @unique @default(uuid())
   user_id     Int
   plan_id     Int
   status      Status       @default(ON_PROCESS)
@@ -47,7 +48,7 @@ model PlansOnUsers {
 
   user User @relation(fields: [user_id], references: [id])
   plan Plan @relation(fields: [plan_id], references: [id])
-  @@id([user_id, plan_id])
+  // @@id([user_id, plan_id])
 }
 
 enum Status {

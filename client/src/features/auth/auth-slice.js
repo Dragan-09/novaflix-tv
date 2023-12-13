@@ -5,6 +5,7 @@ const authSlice = createSlice({
   initialState: {
     isLoggedIn: false,
     showAccount: false,
+    showMobileAccount: false,
     account: {
       full_name: null,
       username: null,
@@ -29,17 +30,28 @@ const authSlice = createSlice({
         plan: null,
       };
     },
-    toggleShowAccount: (state) => {
-      state.showAccount = !state.showAccount;
-    },
-    hideAccount: (state) => {
-      if (state.showAccount) {
-        state.showAccount = false;
+    toggleShowAccount: (state, action) => {
+      if (action.payload.normal) {
+        state.showAccount = !state.showAccount;
+      }
+      if (action.payload.mobile) {
+        state.showBottomAccount = !state.showBottomAccount;
       }
     },
-    showAccount: (state) => {
-      if (!state.showAccount) {
+    hideAccount: (state, action) => {
+      if (state.showAccount && action.payload.normal) {
+        state.showAccount = false;
+      }
+      if (state.showBottomAccount && action.payload.mobile) {
+        state.showBottomAccount = false;
+      }
+    },
+    showAccount: (state, action) => {
+      if (!state.showAccount && action.payload.normal) {
         state.showAccount = true;
+      }
+      if (!state.showBottomAccount && action.payload.mobile) {
+        state.showBottomAccount = true;
       }
     },
   },

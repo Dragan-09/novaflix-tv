@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef } from "react";
 import Navlink from "../atoms/navlink";
 import Button from "../atoms/button";
 import Brand from "../atoms/brand";
@@ -15,7 +15,7 @@ const navlinks = [
     url: "/",
   },
   {
-    name: "Plans",
+    name: "Pricing",
     url: "/#plans",
   },
   {
@@ -37,6 +37,7 @@ function Navbar() {
   const showAccount = useSelector((state) => state.auth.showAccount);
   const dispatch = useDispatch();
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const navbarRef = useRef(null);
   // const userInfoBoxHandler = (currentStatus) => setShowAccount(!currentStatus);
   const [toggleDarkMode] = useTheme();
   const {
@@ -46,7 +47,7 @@ function Navbar() {
   } = useSelector((state) => state.auth.account);
 
   return (
-    <div className="navbar hidden md:flex items-center h-[40px] sm:h-[100px] py-0 sm:py-5 ">
+    <div className="navbar hidden md:flex items-center h-[40px] sm:h-[100px] py-0 sm:py-5">
       <div className="logo h-full aspect-square ms-5">
         <Brand />
       </div>
@@ -72,21 +73,30 @@ function Navbar() {
           </>
         ) : (
           <OutsideClickHandler
-            onOutsideClick={() => dispatch(authActions.hideAccount(false))}
+            onOutsideClick={() =>
+              dispatch(authActions.hideAccount({ normal: true }))
+            }
           >
-            <div className="relative me-4">
+            <div ref={navbarRef} className="relative me-4">
               <Button
                 color={"white"}
                 size={"medium"}
                 style={"filled"}
                 className={""}
-                onClick={() => dispatch(authActions.toggleShowAccount())}
+                onClick={() =>
+                  dispatch(
+                    authActions.toggleShowAccount({
+                      normal: true,
+                    })
+                  )
+                }
               >
                 <span>My Account</span>
               </Button>
               {showAccount && (
                 <div className="absolute top-full right-0 pt-2">
                   <UserDropdown
+                    className={""}
                     full_name={full_name}
                     username={username}
                     current_plan={

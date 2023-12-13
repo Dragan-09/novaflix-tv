@@ -4,6 +4,7 @@ import { BiSolidCategory } from "react-icons/bi";
 import { HiUserCircle } from "react-icons/hi";
 import { HiHome } from "react-icons/hi";
 import { WiMoonAltFirstQuarter } from "react-icons/wi";
+import { GiPriceTag } from "react-icons/gi";
 
 function Icon({ height, width, className, icon, type, src, color }) {
   const icons = {
@@ -32,7 +33,8 @@ function Icon({ height, width, className, icon, type, src, color }) {
       src: "/images/icons/other.png",
     },
     categories: {
-      component: <BiSolidCategory size={width} color={color} />,
+      // component: <BiSolidCategory size={width} color={color} />,
+      component: <GiPriceTag size={width} color={color} />,
     },
     light: {
       component: <IoSunny size={width} color={color} />,
