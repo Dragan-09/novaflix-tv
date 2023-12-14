@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import Input from "../atoms/input";
-import Checkbox from "../atoms/checkbox";
-import Button from "../atoms/button";
+import Input from "../../atoms/input";
+import Checkbox from "../../atoms/checkbox";
+import Button from "../../atoms/button";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 

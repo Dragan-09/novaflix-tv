@@ -1,41 +1,51 @@
 import React, { useEffect, useState } from "react";
 import Brand from "../atoms/brand";
-import { useParams } from "react-router-dom";
-import RegisterForm from "../molecules/register-form";
-import LoginForm from "../molecules/login-form";
-import ResetForm from "../molecules/resetForm";
-import EmailConfirmationForm from "../molecules/email-confirmation-form";
-import NewPasswordForm from "../molecules/new-password-form";
+import { useParams, redirect } from "react-router-dom";
+import { useSelector } from "react-redux";
+import {
+  RegisterForm,
+  LoginForm,
+  ResetForm,
+  NewPasswordForm,
+} from "../molecules/auth/";
 
 function Auth() {
   const [auth, setAuth] = useState("login");
   const { auth: _auth } = useParams();
-  let auths = ["login", "register"];
+  const auths = ["login", "register"];
+  const [loading, setLoading] = useState(true);
+  const [authForm, setAuthForm] = useState(null);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
-  useEffect((_) => {
-    // console.log(_auth)
-    auths.includes(_auth) ? setAuth(_auth) : "";
-  }, []);
+  // useEffect(() => {
+  //   console.log(isLoggedIn);
+  //   auths.includes(_auth) ? setAuth(_auth) : "";
 
-  let authForm;
-  switch (_auth) {
-    case "login":
-      authForm = <LoginForm />;
-      break;
-    case "reset":
-      authForm = <ResetForm />;
-      break;
-    case "confirm":
-      authForm = <EmailConfirmationForm />;
-      break;
-    case "new-password":
-      authForm = <NewPasswordForm />;
-      break;
-    case "register":
-      authForm = <RegisterForm />;
-  }
+  //   switch (_auth) {
+  //     case "login":
+  //       setAuthForm(<LoginForm />);
+  //       break;
+  //     case "reset":
+  //       setAuthForm(<ResetForm />);
+  //       break;
+  //     case "new-password":
+  //       setAuthForm(<NewPasswordForm />);
+  //       break;
+  //     case "register":
+  //       setAuthForm(<RegisterForm />);
+  //       break;
+  //   }
 
-  return (
+  //   // if (isLoggedIn) window.location.href = "/";
+  //   if (isLoggedIn) {
+  //     console.log("IN");
+  //   } else {
+  //     setLoading(false);
+  //   }
+  // }, []);
+
+  console.log(isLoggedIn);
+  return loading == false ? (
     <div className="auth w-[400px] h-full sm:h-auto text-primary dark:text-white p-10 bg-white dark:bg-slate-800 rounded-xl shadow-xl">
       <div className="brand flex justify-center h-12 mb-10">
         <a href="/">
@@ -63,7 +73,7 @@ function Auth() {
       )}
       {authForm}
     </div>
-  );
+  ) : null;
 }
 
 export default Auth;

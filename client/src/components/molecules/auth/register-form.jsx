@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import Input from "../atoms/input";
-import Button from "../atoms/button";
+import Input from "../../atoms/input";
+import Button from "../../atoms/button";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
 

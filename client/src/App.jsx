@@ -6,8 +6,8 @@ import useTheme from "./hooks/useTheme";
 import useAuth from "./hooks/useAuth";
 
 function App() {
-  let [onToggleTheme] = useTheme();
   useAuth();
+  useTheme();
   return (
     <BrowserRouter>
       <Routes>

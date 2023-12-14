@@ -6,8 +6,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import ChannelCard from "../molecules/channel-box";
 import axios from "axios";
-import toast from "react-hot-toast";
-import refreshAccountUtil from "../utils/refresh-account";
 import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "../../features/auth/auth-slice";
 import FreeTrial from "../molecules/free-trial";
@@ -21,6 +19,7 @@ function Hero() {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    console.log(isLoggedIn);
     return async () => {
       try {
         const categories = await axios.get(
