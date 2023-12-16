@@ -40,11 +40,11 @@ const main = async () => {
       },
       {
         name: "Netflix",
-        logo: "channels/netflix.png",
+        logo: "channels/netflix.webp",
       },
       {
         name: "Apple Tv",
-        logo: "channels/appple-tv.webp",
+        logo: "channels/apple-tv.webp",
       },
       {
         name: "Prime Video",

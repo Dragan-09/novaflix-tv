@@ -86,7 +86,7 @@ const register = async (req, res) => {
         from: process.env.MAIL_FROM,
         to: create.email,
         subject: "Email Verification",
-        text: `This is your verfication url: http://localhost:3307/api/user/account/email-confirmation/${storeVerification.encrypted_string}`,
+        text: `This is your verfication url: ${process.env.FRONTEND_URL}/auth/confirm/${storeVerification.encrypted_string}`,
       });
 
       return res.status(201).json({
@@ -184,7 +184,7 @@ const confirm = async (req, res) => {
 
     if (!verification)
       return res.status(400).json({
-        message: "Confirmation Link has expired!",
+        message: "The email confirmation link has expired!",
       });
 
     const verifyUser = await prisma.user.update({
@@ -198,23 +198,20 @@ const confirm = async (req, res) => {
 
     if (!verifyUser)
       return res.status(400).json({
-        message: "Account could not be verified!",
+        message: "Your account could not be verified!",
       });
 
     const removeVerification = await prisma.userVerification.delete({
       where: { encrypted_string: token },
     });
-
-    if (removeVerification) return res.redirect(`${process.env.FRONTEND_URL}`);
   } catch (e) {
+    console.log(e);
     return res.status(500).json({ message: "Something went wrong!" });
   }
 
-  return res.redirect(200, `${process.env.FRONTEND_URL}`);
-
-  // return res.status(200).json({
-  //   message: "Account Verified Successfully!",
-  // });
+  return res.status(201).json({
+    message: "Your account has been successfully verified!",
+  });
 };
 
 module.exports = {

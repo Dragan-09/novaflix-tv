@@ -6,6 +6,7 @@ import useTheme from "./hooks/useTheme";
 import useAuth from "./hooks/useAuth";
 import { useSelector } from "react-redux";
 import NotFound from "./pages/404";
+import EmailConfirmPage from "./pages/email-confirm";
 
 function App() {
   useAuth();
@@ -17,6 +18,10 @@ function App() {
         <Route path="/" element={<HomePage />} />
         {!isLoggedIn && <Route path="/auth/:auth" element={<AuthPage />} />}
         <Route path="*" element={<NotFound />} />
+        <Route
+          path="/auth/confirm/:encrypted_string"
+          element={<EmailConfirmPage />}
+        />
       </Routes>
     </BrowserRouter>
   );
