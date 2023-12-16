@@ -36,7 +36,7 @@ const main = async () => {
     data: [
       {
         name: "Bein Sports",
-        logo: "channels/bein-sports.png",
+        logo: "channels/bein-sports.webp",
       },
       {
         name: "Netflix",
@@ -44,19 +44,19 @@ const main = async () => {
       },
       {
         name: "Apple Tv",
-        logo: "channels/appple-tv.png",
+        logo: "channels/appple-tv.webp",
       },
       {
         name: "Prime Video",
-        logo: "channels/prime-video.png",
+        logo: "channels/prime-video.webp",
       },
       {
         name: "Hulu",
-        logo: "channels/hulu.png",
+        logo: "channels/hulu.webp",
       },
       {
         name: "Formula 1",
-        logo: "channels/formula-1.png",
+        logo: "channels/f1.webp",
       },
     ],
   });
