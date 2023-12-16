@@ -6,6 +6,7 @@
     "lerna": "^8.0.1"
   },
   "scripts": {
+    "dev": "pnpm exec lerna run dev",
     "start": "pnpm exec lerna run start",
     "build": "pnpm exec lerna run build"
   }

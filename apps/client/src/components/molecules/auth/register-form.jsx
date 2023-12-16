@@ -3,6 +3,7 @@ import Input from "../../atoms/input";
 import Button from "../../atoms/button";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
+import { redirect } from "react-router-dom";
 
 function RegisterForm() {
   const [first_name, setFirstname] = useState(null);
@@ -24,7 +25,7 @@ function RegisterForm() {
         password,
         password_confirmation,
       });
-      window.location.href = "/";
+      location.href = "/auth/login";
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.message, { position: "bottom-center" });

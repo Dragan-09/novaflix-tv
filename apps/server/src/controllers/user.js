@@ -86,7 +86,7 @@ const register = async (req, res) => {
         from: process.env.MAIL_FROM,
         to: create.email,
         subject: "Email Verification",
-        text: `This is your verfication url: http://localhost:3307/api/user/verify/${storeVerification.encrypted_string}`,
+        text: `This is your verfication url: http://localhost:3307/api/user/account/email-confirmation/${storeVerification.encrypted_string}`,
       });
 
       return res.status(201).json({
@@ -205,14 +205,16 @@ const confirm = async (req, res) => {
       where: { encrypted_string: token },
     });
 
-    if (removeVerification) res.redirect(`${process.env.FRONTEND_URL}`);
+    if (removeVerification) return res.redirect(`${process.env.FRONTEND_URL}`);
   } catch (e) {
     return res.status(500).json({ message: "Something went wrong!" });
   }
 
-  return res.status(200).json({
-    message: "Account Verified Successfully!",
-  });
+  return res.redirect(200, `${process.env.FRONTEND_URL}`);
+
+  // return res.status(200).json({
+  //   message: "Account Verified Successfully!",
+  // });
 };
 
 module.exports = {
