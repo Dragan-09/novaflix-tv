@@ -5,6 +5,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import refreshAccountUtil from "../utils/refresh-account";
 import { useDispatch } from "react-redux";
+import Icon from "../atoms/icon";
 
 function FreeTrial() {
   const dispatch = useDispatch();
@@ -51,16 +52,15 @@ function FreeTrial() {
       }
     >
       {(close) => (
-        <div className="modal w-11/12 sm:w-1/2 bg-white p-8 rounded-lg text-center mx-auto shadow-xl border-2 border-dashed border-primary dark:bg-slate-800">
+        <div className="modal w-11/12 sm:w-1/2 bg-white p-8 rounded-lg text-center mx-auto shadow-xl border-primary dark:bg-slate-800">
           <div className="header text-2xl font-bold mb-2 text-primary dark:text-white">
             Free Trial
           </div>
           <div className="content text-gray-600 text-sm dark:text-gray-400">
-            Welcome to our platform! Get ready to experience 24 hours of
-            unlimited access with our free trial. Explore all our features, dive
-            into our resources, and discover the full potential of what we
-            offer. No strings attached. Begin your journey by clicking 'Start
-            Trial' below. Let's embark on this exciting adventure together!
+            Welcome to Televista's Free Trial! Immerse yourself in our world of
+            entertainment with unlimited access to premium content for 24 hours.
+            Explore diverse shows, movies, and more hassle-free. No commitments,
+            cancel anytime. Begin your adventure now!
           </div>
           <div className="actions mt-5 flex gap-2 justify-center">
             <Button
@@ -72,7 +72,7 @@ function FreeTrial() {
                 close();
               }}
             >
-              Start Trial
+              Start Trial <Icon width={12} icon={"right"} className={"ms-1"} />
             </Button>
             <Button
               style="outline"

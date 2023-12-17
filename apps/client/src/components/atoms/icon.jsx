@@ -8,6 +8,7 @@ import { GiPriceTag } from "react-icons/gi";
 import { VscSignIn } from "react-icons/vsc";
 import { PiEyeClosedLight } from "react-icons/pi";
 import { VscEye } from "react-icons/vsc";
+import { FaChevronRight } from "react-icons/fa";
 
 function Icon({ height, width, className, icon, type, src, color }) {
   const icons = {
@@ -35,30 +36,59 @@ function Icon({ height, width, className, icon, type, src, color }) {
       type: "img",
       src: "/images/icons/other.png",
     },
+    basic: {
+      type: "img",
+      src: "/images/icons/basic.png",
+    },
+    standard: {
+      type: "img",
+      src: "/images/icons/standard.png",
+    },
+    premium: {
+      type: "img",
+      src: "/images/icons/premium.png",
+    },
     categories: {
       // component: <BiSolidCategory size={width} color={color} />,
-      component: <GiPriceTag size={width} color={color} />,
+      component: (
+        <GiPriceTag size={width} color={color} className={className} />
+      ),
     },
     light: {
-      component: <IoSunny size={width} color={color} />,
+      component: <IoSunny size={width} color={color} className={className} />,
     },
     dark: {
-      component: <WiMoonAltFirstQuarter size={width} color={color} />,
+      component: (
+        <WiMoonAltFirstQuarter
+          size={width}
+          color={color}
+          className={className}
+        />
+      ),
     },
     signin: {
-      component: <VscSignIn size={width} color={color} />,
+      component: <VscSignIn size={width} color={color} className={className} />,
     },
     home: {
-      component: <HiHome size={width} color={color} />,
+      component: <HiHome size={width} color={color} className={className} />,
     },
     user: {
-      component: <HiUserCircle size={width} color={color} />,
+      component: (
+        <HiUserCircle size={width} color={color} className={className} />
+      ),
     },
     "closed-eye": {
-      component: <PiEyeClosedLight size={width} color={color} />,
+      component: (
+        <PiEyeClosedLight size={width} color={color} className={className} />
+      ),
     },
     "opened-eye": {
-      component: <VscEye size={width} color={color} />,
+      component: <VscEye size={width} color={color} className={className} />,
+    },
+    right: {
+      component: (
+        <FaChevronRight size={width} color={color} className={className} />
+      ),
     },
   };
   let _icon = icons[icon];

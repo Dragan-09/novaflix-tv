@@ -30,6 +30,7 @@ model Plan {
   price             Float
   price_description String
   price_id          String
+  image             String?
   duration_days     Int
 
   users             PlansOnUsers[]

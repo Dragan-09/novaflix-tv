@@ -22,8 +22,9 @@ const getPlans = async (req, res) => {
       data: plans.map((plan) => {
         return {
           id: plan.id,
-          name: plan.name,
+          title: plan.name,
           description: plan.description,
+          image: plan.image,
           price: plan.stripe_price.unit_amount / 100,
           price_description: plan.price_description,
         };

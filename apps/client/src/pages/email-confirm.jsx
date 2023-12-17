@@ -31,7 +31,11 @@ function EmailConfirmPage() {
     confirmUserEmail();
   }, []);
 
-  return !loading && <Message message={message} />;
+  return (
+    !loading && (
+      <Message message={message} buttons={[{ content: "Home", link: "/" }]} />
+    )
+  );
 }
 
 export default EmailConfirmPage;

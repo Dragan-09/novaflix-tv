@@ -2,6 +2,8 @@ const bcrypt = require("bcryptjs");
 const { PrismaClient } = require("@prisma/client");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
+const Joi = require("joi");
+require("dotenv").config();
 
 const prisma = new PrismaClient({
   log: [
@@ -24,22 +26,58 @@ const transporter = nodemailer.createTransport({
 });
 
 const register = async (req, res) => {
-  const {
-    username,
-    email,
-    first_name,
-    last_name,
-    password,
-    password_confirmation,
-  } = req.body;
-  if (
-    username &&
-    email &&
-    first_name &&
-    last_name &&
-    password &&
-    password_confirmation
-  ) {
+  const schema = Joi.object({
+    first_name: Joi.string().required().min(3).max(15).messages({
+      "string.empty": "First Name is a required field!",
+      "string.required": "First Name is a required field!",
+      "string.min": "First Name can't be less than {#limit} characters!",
+      "string.max": "First Name can't be nore than {#limit} characters!",
+    }),
+    last_name: Joi.string().required().min(3).max(10).messages({
+      "string.empty": "Last Name is a required field!",
+      "string.required": "Last Name is a required field!",
+      "string.min": "Last Name can't be less than {#limit} characters!",
+      "string.max": "Last Name can't be nore than {#limit} characters!",
+    }),
+    username: Joi.string().required().min(5).max(15).messages({
+      "string.empty": "Username is a required field!",
+      "string.required": "Username is a required field!",
+      "string.min": "Username can't be less than {#limit} characters!",
+      "string.max": "Username can't be nore than {#limit} characters!",
+    }),
+    email: Joi.string()
+      .email({ minDomainSegments: 2, maxDomainSegments: 4 })
+      .required()
+      .messages({
+        "string.empty": "Email is a required field!",
+        "string.required": "Email is a required field!",
+        "string.email": "Please enter a valid email!",
+      }),
+    password: Joi.string()
+      .required()
+      .min(8)
+      .max(40)
+      .pattern(new RegExp("^[a-zA-Z0-9]{3,30}$"))
+      .messages({
+        "string.empty": "Password is a required field!",
+        "string.required": "Password is a required field!",
+        "string.min": "Password can't be less than {#limit} characters!",
+        "string.max": "Password can't be nore than {#limit} characters!",
+      }),
+    password_confirmation: Joi.string()
+      .valid(Joi.ref("password"))
+      .required()
+      .messages({
+        "string.empty": "Please confirm the password!",
+        "string.required": "Please confirm the password!",
+        "any.only": "Passwords don't match!",
+      }),
+  }).with("password", "password_confirmation");
+
+  try {
+    const body = await schema.validateAsync(req.body);
+    const { username, email, first_name, last_name, password } = body;
+
     const userWithEmail = await prisma.user.findFirst({ where: { email } });
     const userWithUsername = await prisma.user.findFirst({
       where: { username },
@@ -50,65 +88,76 @@ const register = async (req, res) => {
         .status(400)
         .json({ message: "This username is already taken!" });
     }
+
     if (userWithEmail) {
       return res.status(400).json({ message: "This email is already taken!" });
     }
-    if (password !== password_confirmation) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Passwords don't match" });
-    }
 
-    try {
-      const hashed_password = bcrypt.hashSync(password);
-      const oneHourLater = new Date(
-        new Date().getTime() + 60 * 120 * 1000
-      ).toISOString();
+    const hashed_password = bcrypt.hashSync(password);
+    const oneHourLater = new Date(
+      new Date().getTime() + 60 * 120 * 1000
+    ).toISOString();
 
-      const create = await prisma.user.create({
-        data: {
-          username,
-          email,
-          first_name,
-          last_name,
-          password: hashed_password,
-        },
-      });
+    const create = await prisma.user.create({
+      data: {
+        username,
+        email,
+        first_name,
+        last_name,
+        password: hashed_password,
+      },
+    });
 
-      const storeVerification = await prisma.userVerification.create({
-        data: {
-          user_id: create.id,
-          expires_at: oneHourLater,
-        },
-      });
+    const storeVerification = await prisma.userVerification.create({
+      data: {
+        user_id: create.id,
+        expires_at: oneHourLater,
+      },
+    });
 
-      const verify = await transporter.sendMail({
-        from: process.env.MAIL_FROM,
-        to: create.email,
-        subject: "Email Verification",
-        text: `This is your verfication url: ${process.env.FRONTEND_URL}/auth/confirm/${storeVerification.encrypted_string}`,
-      });
+    const verify = await transporter.sendMail({
+      from: process.env.MAIL_FROM,
+      to: create.email,
+      subject: "Email Verification",
+      text: `This is your verfication url: ${process.env.FRONTEND_URL}/auth/confirm/${storeVerification.encrypted_string}`,
+    });
 
-      return res.status(201).json({
-        message:
-          "Account Created, a confirmation email sent to your email address.",
-        data: verify,
-      });
-    } catch (e) {
-      console.log(e);
-      return res.status(400).json({ message: "Something went wrong!" });
-    }
+    return res.status(201).json({
+      message:
+        "Account Created, a confirmation email sent to your email address.",
+      data: verify,
+    });
+  } catch (e) {
+    console.log(e.details);
+    return res
+      .status(400)
+      .json({ messages: [...e.details.map((m) => m.message)] });
   }
-
-  return res
-    .status(400)
-    .json({ success: false, message: "Make sure to fill all fields!" });
 };
 
 const login = async (req, res) => {
-  const { username, password } = req.body;
+  const schema = Joi.object({
+    username: Joi.string()
+      .required()
+      .max(parseInt(process.env.USERNAME_MAX_LENGTH))
+      .messages({
+        "string.required": "Login field can't be empty!",
+        "string.empty": "Login field can't be empty!",
+        "string.max": "Username can't be more than {#limit} characters!",
+      }),
+    password: Joi.string()
+      .required()
+      .max(parseInt(process.env.PASSWORD_MAX_LENGTH))
+      .messages({
+        "string.required": "Password field can't be empty!",
+        "string.empty": "Password field can't be empty!",
+      }),
+  });
 
-  if (username && password) {
+  try {
+    const body = await schema.validateAsync(req.body);
+    const { username, password } = req.body;
+
     const user = await prisma.user.findFirst({ where: { username } });
 
     if (!user)
@@ -128,12 +177,12 @@ const login = async (req, res) => {
         token,
       });
     }
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({
+      messages: [...error.details.map((m) => m.message)],
+    });
   }
-
-  return res.status(400).json({
-    success: false,
-    message: "Make sure to fill all the fields!",
-  });
 };
 
 const account = async (req, res) => {

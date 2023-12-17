@@ -21,7 +21,12 @@ function LoginForm() {
       localStorage.setItem("Authorization", `Bearer ${login.data.token}`);
       window.location.href = "/";
     } catch (error) {
-      toast.error(error.response.data.message, { position: "bottom-center" });
+      error.response.data.messages.map((message) =>
+        toast.error(message, {
+          position: "bottom-center",
+          style: { textAlign: "center" },
+        })
+      );
     }
   };
 

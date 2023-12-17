@@ -25,10 +25,15 @@ function RegisterForm() {
         password,
         password_confirmation,
       });
-      location.href = "/auth/login";
+      location.href = "/auth/link-sent";
     } catch (error) {
-      console.log(error);
-      toast.error(error.response.data.message, { position: "bottom-center" });
+      console.log(error.response.data.messages);
+      error.response.data.messages.map((message) =>
+        toast.error(message, {
+          position: "bottom-center",
+          style: { textAlign: "center" },
+        })
+      );
     }
   };
   return (

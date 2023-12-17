@@ -60,7 +60,7 @@ function HomePage() {
         <BottomNavbar />
         <Hero />
         <Section title="Get Yours Now" id="pricing">
-          <div className="plans container px-0 sm:px-5 md:px-10 my-5 md:my-10 w-full">
+          <div className="plans container px-0 sm:px-5 md:px-10 my-5 md:my-10 w-full 2xl:px-40">
             <Swiper
               modules={[EffectCards, Autoplay]}
               autoplay={{ delay: 5000 }}
@@ -91,7 +91,7 @@ function HomePage() {
                       description={description}
                       price={price}
                       resubdesc={price_description}
-                      icon={"sport"}
+                      icon={plan.image}
                       main={id == 2 ? true : false}
                     />
                   </SwiperSlide>

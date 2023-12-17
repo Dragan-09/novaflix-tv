@@ -31,28 +31,38 @@ function PlanCard({ id, title, description, price, resubdesc, icon, main }) {
   };
   return (
     <div
-      className={`plan shadow shadow-xl rounded-3xl py-10 px-0 sm:px-10 sm:py-10 w-[80%] sm:w-full text-center text-gray mx-auto ${
-        main ? "bg-primary dark:bg-white" : "bg-white dark:bg-slate-800"
+      className={`plan shadow-black rounded-3xl overflow-hidden px-0 sm:px-0 pb-10 w-[90%] sm:w-full text-center text-gray mx-auto ${
+        // main ? "bg-primary dark:bg-white" : "bg-white dark:bg-slate-800"
+        "bg-white dark:bg-slate-800"
       }`}
     >
-      <div className="icon">
+      <div
+        className={`icon py-12 relative after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:translate-x-[-50%] after:translate-y-[100%] after:border-[20px] after:border-transparent ${
+          // main
+          //   ? "dark:bg-slate-800 dark:after:border-t-slate-800 bg-white after:border-t-white drop-shadow-2xl"
+          //   : "bg-primary dark:bg-white after:border-t-primary dark:after:border-t-white"
+          "bg-primary dark:bg-slate-200 after:border-t-primary dark:after:border-t-slate-200"
+        }`}
+      >
         <Icon
           icon={icon}
-          width="100px"
-          height="100px"
-          className="mx-auto dark:grayscale"
+          width="150px"
+          height="150px"
+          className="mx-auto invert dark:invert-0"
         />
       </div>
       <div
         className={`title capitalize text-4xl font-semibold pt-7 ${
-          main ? "text-white dark:text-primary" : "text-primary dark:text-white"
+          // main ? "text-white dark:text-primary" : "text-primary dark:text-white"
+          "text-primary dark:text-white"
         }`}
       >
         {title}
       </div>
       <div
         className={`description px-10 pt-7 ${
-          main ? "text-gray-100 dark:text-gray-300" : "text-gray-300"
+          // main ? "text-gray-100 dark:text-gray-300" : "text-gray-300"
+          "text-gray-300"
         }`}
       >
         {description}
@@ -60,14 +70,16 @@ function PlanCard({ id, title, description, price, resubdesc, icon, main }) {
       <hr className="my-10 mx-10" />
       <div
         className={`price text-5xl font-light ${
-          main ? "text-white dark:text-primary" : "text-primary dark:text-white"
+          // main ? "text-white dark:text-primary" : "text-primary dark:text-white"
+          "text-primary dark:text-white"
         }`}
       >
         &#x24;{price}
       </div>
       <div
         className={`resubscription text-sm pb-10 ${
-          main ? "text-gray-100 dark:text-gray-300" : "text-gray-300"
+          // main ? "text-gray-100 dark:text-gray-300" : "text-gray-300"
+          "text-gray-300"
         }`}
       >
         {resubdesc}
@@ -76,7 +88,9 @@ function PlanCard({ id, title, description, price, resubdesc, icon, main }) {
         size="large"
         style="rounded"
         color="text-white"
-        className={`${main ? "shadow shadow-xl shadow-secondary/70" : ""}`}
+        className={`${
+          main ? "shadow shadow-xl dark:shadow-lg shadow-secondary/70" : ""
+        }`}
         onClick={purchase}
       >
         {isProcessing ? "Processing..." : "Start Now"}
