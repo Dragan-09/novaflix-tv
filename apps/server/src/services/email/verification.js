@@ -1,6 +1,6 @@
-const nodemailer = require("nodemailer");
 const { PrismaClient } = require("@prisma/client");
 require("dotenv").config();
+const transporter = require("./transporter");
 
 const prisma = new PrismaClient({
   log: [
@@ -34,21 +34,11 @@ const verify = async (user_id) => {
       },
     });
 
-    const transporter = nodemailer.createTransport({
-      host: process.env.MAIL_HOST,
-      port: process.env.MAIL_PORT,
-      // secure: false,
-      auth: {
-        user: process.env.MAIL_USER,
-        pass: process.env.MAIL_PASSWORD,
-      },
-    });
-
     const verify = await transporter.sendMail({
       from: process.env.MAIL_FROM,
       to: user.email,
       subject: "Email Verification",
-      text: `This is your verfication url: ${process.env.FRONTEND_URL}/auth/confirm/${storeVerification.encrypted_string}`,
+      html: `This is your verfication link: <a href="${process.env.FRONTEND_URL}/auth/confirm/${storeVerification.encrypted_string}">Verify</a>`,
     });
 
     return verify;

@@ -1,5 +1,6 @@
 require("dotenv").config();
 const { PrismaClient } = require("@prisma/client");
+const { notifyAdminWithPurchase } = require("../services/email/notify_admin");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const now = new Date();
 
@@ -124,7 +125,17 @@ const subscribe = async (req, res) => {
               subscription.current_period_end * 1000
             ).toISOString(),
           },
+          select: {
+            plan,
+          },
         });
+
+        const notify = await notifyAdminWithPurchase(
+          user,
+          subscribe.plan.name,
+          subscribe.type
+        );
+
         return res.redirect(
           `${process.env.FRONTEND_URL}/?congrats=subscription`
         );
@@ -179,7 +190,16 @@ const trial = async (req, res) => {
         ).toISOString(),
         type: "TRIAL",
       },
+      select: {
+        plan: true,
+      },
     });
+
+    const notify = await notifyAdminWithPurchase(
+      user,
+      setTrial.plan.name,
+      setTrial.type
+    );
 
     return res.status(200).json({
       message: "Congratulations! You got the 24 hours trial. Check you email!",
