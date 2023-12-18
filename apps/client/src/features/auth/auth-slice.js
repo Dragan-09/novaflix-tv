@@ -10,16 +10,19 @@ const authSlice = createSlice({
       full_name: null,
       username: null,
       plan: null,
+      verified: null,
     },
   },
   reducers: {
     login: (state, action) => {
-      const { first_name, last_name, plan, username } = action.payload;
+      const { first_name, last_name, plan, username, verified } =
+        action.payload;
       state.isLoggedIn = true;
       state.account = {
         full_name: `${first_name} ${last_name}`,
-        username: username,
-        plan: plan,
+        username,
+        plan,
+        verified,
       };
     },
     logout: (state) => {

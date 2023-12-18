@@ -3,7 +3,14 @@ import dateFormat from "dateformat";
 import Button from "../atoms/button";
 import logoutUtil from "../utils/logout";
 
-function UserDropdown({ full_name, username, current_plan, className }) {
+function UserDropdown({
+  full_name,
+  username,
+  current_plan,
+  verified,
+  className,
+}) {
+  console.log(verified);
   const end_date_format = dateFormat(current_plan.end_date, "dd mmm yyyy");
   const diff_days = Math.abs(
     Math.floor((new Date() - new Date(current_plan.end_date)) / 8.64e7)
@@ -34,7 +41,14 @@ function UserDropdown({ full_name, username, current_plan, className }) {
     >
       <div className="w-full text-center py-4 border-b border-gray-500/40">
         <div className="w-full font-bold text-xl h-6">Hi, {full_name}!</div>
-        <div className="w-full text-gray-500 text-sm">@{username}</div>
+        <div className="w-full text-gray-500 text-sm">
+          @{username}{" "}
+          {!verified && (
+            <>
+              &middot; <span className="text-secondary">Unverified</span>
+            </>
+          )}
+        </div>
       </div>
       <div className="w-full pt-3 px-1 pb-4">
         <div className="w-full text-primary font-semibold text-md h-4">

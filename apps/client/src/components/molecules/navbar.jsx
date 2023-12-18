@@ -10,10 +10,6 @@ import useTheme from "../../hooks/useTheme";
 import { authActions } from "../../features/auth/auth-slice";
 
 const navlinks = [
-  // {
-  //   name: "Home",
-  //   url: "/",
-  // },
   {
     name: "Pricing",
     url: "/#pricing",
@@ -38,6 +34,7 @@ function Navbar() {
   const {
     full_name,
     username,
+    verified,
     plan: current_plan,
   } = useSelector((state) => state.auth.account);
 
@@ -91,6 +88,7 @@ function Navbar() {
                     className={""}
                     full_name={full_name}
                     username={username}
+                    verified={verified}
                     current_plan={
                       current_plan && {
                         name: current_plan.name,

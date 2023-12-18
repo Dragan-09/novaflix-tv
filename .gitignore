@@ -1,3 +1,4 @@
 .todo
 .env
 node_modules
+*.sql

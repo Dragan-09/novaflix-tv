@@ -19,6 +19,7 @@ function BottomNavbar() {
   const {
     full_name,
     username,
+    verified,
     plan: current_plan,
   } = useSelector((state) => state.auth.account);
 
@@ -53,6 +54,7 @@ function BottomNavbar() {
               className={"sm:hidden"}
               full_name={full_name}
               username={username}
+              verifed={verified}
               current_plan={
                 current_plan && {
                   name: current_plan.name,

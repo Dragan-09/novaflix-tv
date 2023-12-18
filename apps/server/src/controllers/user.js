@@ -1,8 +1,8 @@
 const bcrypt = require("bcryptjs");
 const { PrismaClient } = require("@prisma/client");
 const jwt = require("jsonwebtoken");
-const nodemailer = require("nodemailer");
 const Joi = require("joi");
+const verify = require("../services/email/verification");
 require("dotenv").config();
 
 const prisma = new PrismaClient({
@@ -14,16 +14,6 @@ const prisma = new PrismaClient({
 });
 const jwt_secret = process.env.JWT_SECRET;
 const now = new Date();
-
-const transporter = nodemailer.createTransport({
-  host: process.env.MAIL_HOST,
-  port: process.env.MAIL_PORT,
-  // secure: false,
-  auth: {
-    user: process.env.MAIL_USER,
-    pass: process.env.MAIL_PASSWORD,
-  },
-});
 
 const register = async (req, res) => {
   const schema = Joi.object({
@@ -86,17 +76,16 @@ const register = async (req, res) => {
     if (userWithUsername) {
       return res
         .status(400)
-        .json({ message: "This username is already taken!" });
+        .json({ messages: ["This username is already taken!"] });
     }
 
     if (userWithEmail) {
-      return res.status(400).json({ message: "This email is already taken!" });
+      return res
+        .status(400)
+        .json({ messages: ["This email is already taken!"] });
     }
 
     const hashed_password = bcrypt.hashSync(password);
-    const oneHourLater = new Date(
-      new Date().getTime() + 60 * 120 * 1000
-    ).toISOString();
 
     const create = await prisma.user.create({
       data: {
@@ -108,19 +97,7 @@ const register = async (req, res) => {
       },
     });
 
-    const storeVerification = await prisma.userVerification.create({
-      data: {
-        user_id: create.id,
-        expires_at: oneHourLater,
-      },
-    });
-
-    const verify = await transporter.sendMail({
-      from: process.env.MAIL_FROM,
-      to: create.email,
-      subject: "Email Verification",
-      text: `This is your verfication url: ${process.env.FRONTEND_URL}/auth/confirm/${storeVerification.encrypted_string}`,
-    });
+    const v = await verify(create.id);
 
     return res.status(201).json({
       message:
@@ -128,10 +105,10 @@ const register = async (req, res) => {
       data: verify,
     });
   } catch (e) {
-    console.log(e.details);
+    console.log(e);
     return res
       .status(400)
-      .json({ messages: [...e.details.map((m) => m.message)] });
+      .json({ messages: e.details && [...e.details.map((m) => m.message)] });
   }
 };
 
@@ -163,7 +140,7 @@ const login = async (req, res) => {
     if (!user)
       return res.status(400).json({
         success: false,
-        message: "Invalid Credentials!",
+        messages: ["Invalid Credentials!"],
       });
 
     if (bcrypt.compareSync(password, user.password)) {
@@ -193,6 +170,7 @@ const account = async (req, res) => {
       username: true,
       first_name: true,
       last_name: true,
+      verified: true,
       plans: {
         orderBy: { ends_at: "desc" },
         select: {
@@ -211,6 +189,7 @@ const account = async (req, res) => {
       username: user.username,
       first_name: user.first_name,
       last_name: user.last_name,
+      verified: user.verified,
       plan: user.plans.length > 0 && {
         name: user.plans[0].plan.name,
         status: user.plans[0].status,
