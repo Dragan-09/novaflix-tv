@@ -1,14 +1,9 @@
 const { PrismaClient } = require("@prisma/client");
-require("dotenv").config();
 const transporter = require("./transporter");
+const generate_template = require("./template");
+require("dotenv").config();
 
-const prisma = new PrismaClient({
-  log: [
-    {
-      level: "query",
-    },
-  ],
-});
+const prisma = new PrismaClient();
 
 const verify = async (user_id) => {
   const oneHourLater = new Date(
@@ -34,11 +29,22 @@ const verify = async (user_id) => {
       },
     });
 
+    const content = generate_template("verification", {
+      user: {
+        username: user.username,
+      },
+      brand: "Televista",
+      link: `${process.env.FRONTEND_URL}/auth/confirm/${storeVerification.encrypted_string}`,
+    });
+
     const verify = await transporter.sendMail({
       from: process.env.MAIL_FROM,
       to: user.email,
       subject: "Email Verification",
-      html: `This is your verfication link: <a href="${process.env.FRONTEND_URL}/auth/confirm/${storeVerification.encrypted_string}">Verify</a>`,
+      html: content,
+      headers: {
+        "X-Gmail-Labels": "Updates", // Set the category to 'Updates'
+      },
     });
 
     return verify;

@@ -1,6 +1,7 @@
 require("dotenv").config();
 const { PrismaClient } = require("@prisma/client");
 const { notifyAdminWithPurchase } = require("../services/email/notify_admin");
+const purchase_trial = require("../services/email/purchase_trial");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const now = new Date();
 
@@ -74,7 +75,6 @@ const purchase = async (req, res) => {
 
     const session = await stripe.checkout.sessions.create({
       success_url: `${process.env.BACKEND_URL}/api/subscribe/${plan_id}/${user.id}?session_id={CHECKOUT_SESSION_ID}`,
-      // return_url: process.env.FRONTEND_URL,
       customer_email: user.email,
       line_items: [
         {
@@ -126,9 +126,12 @@ const subscribe = async (req, res) => {
             ).toISOString(),
           },
           select: {
-            plan,
+            plan: true,
+            type: true,
           },
         });
+
+        const sendEmail = await purchase_trial(user, plan, subscribe.type);
 
         const notify = await notifyAdminWithPurchase(
           user,
@@ -153,7 +156,6 @@ const subscribe = async (req, res) => {
 
 const trial = async (req, res) => {
   const { id: user } = req.user;
-  console.log(user);
   try {
     const subscriptions = await prisma.plansOnUsers.findFirst({
       where: {
@@ -194,6 +196,8 @@ const trial = async (req, res) => {
         plan: true,
       },
     });
+
+    const sendEmail = await purchase_trial(user, 2, "TRIAL");
 
     const notify = await notifyAdminWithPurchase(
       user,

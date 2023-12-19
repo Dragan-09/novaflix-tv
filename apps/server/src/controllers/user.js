@@ -97,7 +97,7 @@ const register = async (req, res) => {
       },
     });
 
-    const v = await verify(create.id);
+    const sendEmail = await verify(create.id);
 
     return res.status(201).json({
       message:

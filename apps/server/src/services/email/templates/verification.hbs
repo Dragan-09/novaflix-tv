@@ -1,0 +1,45 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body style="box-sizing: border-box; font-family: inter">
+    <div class="doc" style="width: 100%;">
+      <div
+        class="container"
+        style="width: 600px; height: 300px; background-color: #eeeeee; border-radius: 20px; text-align: center; padding: 30px 20px; margin: auto"
+      >
+        <div class="logo" style="height: 60px;">
+          <img
+            src="https://lh3.googleusercontent.com/drive-viewer/AEYmBYS3hAyAvbiG7whg50BIp6LCfUgjM30hbak_dJNcxSj59tUvVM9lS4eVUZNgmCcovAppWWQzaUzrV8d1IG3BA-EJoXZl_Q=w1920-h957"
+            alt="{{brand}} Brand"
+            style="height: 100%"
+          />
+        </div>
+        <div
+          class="title"
+          style="color: #78c7c7; font-weight: bold; font-size: 25px;"
+        >Welcome {{user.username}}!</div>
+        <p style="font-size: 14px; font-weight:500; color: black">
+          To complete your registration, please click the button below to verify
+          your email address. This will give you access to our incredible range
+          of entertainment.
+        </p>
+        <button
+          style="text-decoration: none;background-color: #78c7c7;color: white;border: solid 2px transparent;border-radius: 7px;font-weight: 600;text-transform: capitalize;padding: 8px 30px;font-size: 17px;"
+        ><a
+            href="{{link}}"
+            style="text-decoration: none; color: white"
+          >Verify</a></button>
+        <p
+          class="footer"
+          style="font-size: 14px; color: rgba(0, 0, 0, 0.7); margin-top: 30px;"
+        >
+          If you didn’t sign up for
+          {{brand}}, feel free to ignore this message. Your information is safe
+          and no further action is needed.
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
