@@ -49,7 +49,7 @@ model PlansOnUsers {
 
   user User @relation(fields: [user_id], references: [id])
   plan Plan @relation(fields: [plan_id], references: [id])
-  
+
   @@map("subscriptions")
 }
 
