@@ -1,7 +1,8 @@
 import express, { urlencoded, json } from "express";
 import morgan from "morgan";
 import cors from "cors";
-import _ from "dotenv";
+import { admin, adminRouter } from "./admin/index.mjs";
+import bodyParser from "body-parser";
 
 const app = express();
 const port = process.env.APP_PORT;
@@ -19,6 +20,7 @@ app.use(
   })
 );
 app.use(morgan("tiny"));
+app.use(admin.options.rootPath, adminRouter);
 app.use(urlencoded({ extended: "false" }));
 app.use(json());
 

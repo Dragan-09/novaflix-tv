@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { notifyAdminWithPurchase } from "../services/email/notify_admin.mjs";
 import purchase_trial from "../services/email/purchase_trial.mjs";
 import { Stripe } from "stripe";
+import activeSubscriptions from "../services/email/active_subscription.mjs";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const prisma = new PrismaClient();
@@ -214,4 +215,42 @@ const trial = async (req, res) => {
   }
 };
 
-export { getPlans, purchase, subscribe, trial };
+const active = async (req, res) => {
+  const {
+    user: user_id,
+    subscription: subscription_id,
+    sub_username,
+    sub_password,
+  } = req.params;
+
+  if (!user_id || !subscription_id || !sub_username || !sub_password)
+    return res.json(400).json({ message: "Something Went Wrong!" });
+
+  const user = await prisma.user.findFirstOrThrow({
+    where: {
+      id: parseInt(user_id),
+    },
+  });
+
+  const subscription = await prisma.plansOnUsers.findFirstOrThrow({
+    where: {
+      id: parseInt(subscription_id),
+      user_id: parseInt(user_id),
+    },
+    select: { plan: true },
+  });
+
+  const sendEmail = await activeSubscriptions(
+    user.email,
+    user.username,
+    subscription.plan.name,
+    sub_username,
+    sub_password
+  );
+
+  return res.status(201).json({
+    message: "Subscription Activated",
+  });
+};
+
+export { getPlans, purchase, subscribe, trial, active };

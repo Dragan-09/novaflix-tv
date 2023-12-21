@@ -19,6 +19,7 @@ model User {
   updated_at    DateTime  @updatedAt
   plans         PlansOnUsers[]
   verifications UserVerification[]
+  Credentials   Credentials[]
 
   @@map("users")
 }
@@ -38,14 +39,15 @@ model Plan {
 }
 
 model PlansOnUsers {
-  id          String @unique @default(uuid())
-  user_id     Int
-  plan_id     Int
-  status      Status       @default(ON_PROCESS)
+  id              Int       @id @default(autoincrement())
+  uuid            String    @db.Uuid
+  user_id         Int
+  plan_id         Int
+  status          Status    @default(ON_PROCESS)
   subscription_id String?
-  assigned_at DateTime @default(now())
-  ends_at     DateTime
-  type        SubType @default(NORMAL)
+  assigned_at     DateTime  @default(now())
+  ends_at         DateTime
+  type            SubType   @default(NORMAL)
 
   user User @relation(fields: [user_id], references: [id])
   plan Plan @relation(fields: [plan_id], references: [id])
@@ -89,4 +91,14 @@ model UserVerification {
 
   user User @relation(fields: [user_id], references: [id])
   @@map("users_verification")
+}
+
+model Credentials {
+  id          Int     @id @default(autoincrement())
+  user_id     Int
+  username    String
+  password    String
+  email_sent  Boolean @default(false)
+
+  user User @relation(fields: [user_id], references: [id])
 }
