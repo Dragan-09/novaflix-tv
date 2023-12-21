@@ -1,9 +1,8 @@
-const bcrypt = require("bcryptjs");
-const { PrismaClient } = require("@prisma/client");
-const jwt = require("jsonwebtoken");
-const Joi = require("joi");
-const verify = require("../services/email/verification");
-require("dotenv").config();
+import bcryptjs from "bcryptjs";
+import { PrismaClient } from "@prisma/client";
+import jwt from "jsonwebtoken";
+import Joi from "joi";
+import verify from "../services/email/verification.mjs";
 
 const prisma = new PrismaClient({
   log: [
@@ -14,6 +13,7 @@ const prisma = new PrismaClient({
 });
 const jwt_secret = process.env.JWT_SECRET;
 const now = new Date();
+const { hashSync, compareSync } = bcryptjs;
 
 const register = async (req, res) => {
   const schema = Joi.object({
@@ -85,7 +85,7 @@ const register = async (req, res) => {
         .json({ messages: ["This email is already taken!"] });
     }
 
-    const hashed_password = bcrypt.hashSync(password);
+    const hashed_password = hashSync(password);
 
     const create = await prisma.user.create({
       data: {
@@ -143,11 +143,13 @@ const login = async (req, res) => {
         messages: ["Invalid Credentials!"],
       });
 
-    if (bcrypt.compareSync(password, user.password)) {
+    if (compareSync(password, user.password)) {
       const token = jwt.sign(
         { id: user.id, username: user.username },
         jwt_secret,
-        { expiresIn: "10d" }
+        {
+          expiresIn: "10d",
+        }
       );
       return res.status(200).json({
         user,
@@ -242,9 +244,4 @@ const confirm = async (req, res) => {
   });
 };
 
-module.exports = {
-  register,
-  login,
-  account,
-  confirm,
-};
+export { register, login, account, confirm };

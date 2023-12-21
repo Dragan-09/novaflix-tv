@@ -1,6 +1,5 @@
-require("dotenv").config();
-const transporter = require("./transporter");
-const { PrismaClient } = require("@prisma/client");
+import transporter from "./transporter.mjs";
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -21,4 +20,4 @@ const notifyAdminWithPurchase = async (user_id, plan_name, plan_type) => {
   return notify;
 };
 
-module.exports = { notifyAdminWithPurchase };
+export { notifyAdminWithPurchase };

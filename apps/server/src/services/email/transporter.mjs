@@ -1,6 +1,6 @@
-const nodemailer = require("nodemailer");
+import { createTransport } from "nodemailer";
 
-const transporter = nodemailer.createTransport({
+const transporter = createTransport({
   host: process.env.MAIL_HOST,
   port: process.env.MAIL_PORT,
   // secure: false,
@@ -10,4 +10,4 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-module.exports = transporter;
+export default transporter;

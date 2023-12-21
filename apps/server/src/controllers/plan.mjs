@@ -1,15 +1,15 @@
-require("dotenv").config();
-const { PrismaClient } = require("@prisma/client");
-const { notifyAdminWithPurchase } = require("../services/email/notify_admin");
-const purchase_trial = require("../services/email/purchase_trial");
-const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
-const now = new Date();
+import { PrismaClient } from "@prisma/client";
+import { notifyAdminWithPurchase } from "../services/email/notify_admin.mjs";
+import purchase_trial from "../services/email/purchase_trial.mjs";
+import { Stripe } from "stripe";
 
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const prisma = new PrismaClient();
+const now = new Date();
 
 const getPlans = async (req, res) => {
   try {
-    let plans = await prisma.plan.findMany();
+    let plans = await prisma.plan.findMany({ orderBy: { id: "asc" } });
     if (!plans)
       return res.status(500).json({ Message: "Something went wrong!" });
 
@@ -214,4 +214,4 @@ const trial = async (req, res) => {
   }
 };
 
-module.exports = { getPlans, purchase, subscribe, trial };
+export { getPlans, purchase, subscribe, trial };
