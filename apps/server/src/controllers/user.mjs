@@ -173,6 +173,7 @@ const account = async (req, res) => {
       first_name: true,
       last_name: true,
       verified: true,
+      role: true,
       plans: {
         orderBy: { ends_at: "desc" },
         select: {
@@ -184,14 +185,17 @@ const account = async (req, res) => {
       },
     },
   });
+
   if (!user)
     return res.status(400).json({ message: "This user does not exist!" });
+
   return res.status(200).json({
     data: {
       username: user.username,
       first_name: user.first_name,
       last_name: user.last_name,
       verified: user.verified,
+      role: user.role,
       plan: user.plans.length > 0 && {
         name: user.plans[0].plan.name,
         status: user.plans[0].status,

@@ -1,17 +1,19 @@
 import express, { urlencoded, json } from "express";
 import morgan from "morgan";
 import cors from "cors";
-import { admin, adminRouter } from "./admin/index.mjs";
-import bodyParser from "body-parser";
 
 const app = express();
 const port = process.env.APP_PORT;
 
+// routes
 import auth from "./routes/auth.mjs";
 import channel from "./routes/channel.mjs";
 import category from "./routes/category.mjs";
 import plan from "./routes/plan.mjs";
 import user from "./routes/user.mjs";
+
+// services
+import sendCredentials from "./services/email/credentials.mjs";
 
 app.use(
   cors({
@@ -20,7 +22,6 @@ app.use(
   })
 );
 app.use(morgan("tiny"));
-app.use(admin.options.rootPath, adminRouter);
 app.use(urlencoded({ extended: "false" }));
 app.use(json());
 
@@ -28,4 +29,7 @@ app.use("/api/auth", auth);
 app.use("/api", channel, category, plan);
 app.use("/api/user", user);
 
+sendCredentials();
+
+// app start
 app.listen(port, console.log(`Listening on port ${port}....`));

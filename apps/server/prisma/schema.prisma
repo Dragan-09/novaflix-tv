@@ -14,6 +14,7 @@ model User {
   password      String  
   first_name    String  
   last_name     String
+  role          Role      @default(USER)
   verified      Boolean   @default(false)
   created_at    DateTime  @default(now())
   updated_at    DateTime  @updatedAt
@@ -22,6 +23,11 @@ model User {
   Credentials   Credentials[]
 
   @@map("users")
+}
+
+enum Role {
+  USER
+  ADMIN
 }
 
 model Plan {
@@ -40,7 +46,7 @@ model Plan {
 
 model PlansOnUsers {
   id              Int       @id @default(autoincrement())
-  uuid            String    @db.Uuid
+  uuid            String    @db.Uuid @unique
   user_id         Int
   plan_id         Int
   status          Status    @default(ON_PROCESS)
@@ -48,6 +54,7 @@ model PlansOnUsers {
   assigned_at     DateTime  @default(now())
   ends_at         DateTime
   type            SubType   @default(NORMAL)
+  credentials     Credentials?
 
   user User @relation(fields: [user_id], references: [id])
   plan Plan @relation(fields: [plan_id], references: [id])
@@ -95,10 +102,12 @@ model UserVerification {
 
 model Credentials {
   id          Int     @id @default(autoincrement())
+  subscription_uuid String @db.Uuid @unique
   user_id     Int
   username    String
   password    String
   email_sent  Boolean @default(false)
 
+  subscription PlansOnUsers @relation(fields: [subscription_uuid], references: [uuid])
   user User @relation(fields: [user_id], references: [id])
 }

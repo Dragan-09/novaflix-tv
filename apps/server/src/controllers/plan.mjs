@@ -3,6 +3,8 @@ import { notifyAdminWithPurchase } from "../services/email/notify_admin.mjs";
 import purchase_trial from "../services/email/purchase_trial.mjs";
 import { Stripe } from "stripe";
 import activeSubscriptions from "../services/email/active_subscription.mjs";
+import { v4 as uuidv4 } from "uuid";
+import Redis from "ioredis";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const prisma = new PrismaClient();
@@ -113,8 +115,10 @@ const subscribe = async (req, res) => {
           }
         );
 
+        const generated_uuid = uuidv4();
         const subscribe = await prisma.plansOnUsers.create({
           data: {
+            uuid: generated_uuid,
             user_id: parseInt(user),
             plan_id: parseInt(plan),
             status: "ON_PROCESS",
@@ -127,6 +131,7 @@ const subscribe = async (req, res) => {
             ).toISOString(),
           },
           select: {
+            uuid: true,
             plan: true,
             type: true,
           },
@@ -137,7 +142,8 @@ const subscribe = async (req, res) => {
         const notify = await notifyAdminWithPurchase(
           user,
           subscribe.plan.name,
-          subscribe.type
+          subscribe.type,
+          subscribe.uuid
         );
 
         return res.redirect(
@@ -183,8 +189,10 @@ const trial = async (req, res) => {
         .status(400)
         .json({ message: "You can not have the free trial more than once!" });
 
+    const generated_uuid = uuidv4();
     const setTrial = await prisma.plansOnUsers.create({
       data: {
+        uuid: generated_uuid,
         user_id: user,
         plan_id: 2,
         status: "ON_PROCESS",
@@ -203,7 +211,8 @@ const trial = async (req, res) => {
     const notify = await notifyAdminWithPurchase(
       user,
       setTrial.plan.name,
-      setTrial.type
+      setTrial.type,
+      generated_uuid
     );
 
     return res.status(200).json({
@@ -215,42 +224,92 @@ const trial = async (req, res) => {
   }
 };
 
-const active = async (req, res) => {
-  const {
-    user: user_id,
-    subscription: subscription_id,
-    sub_username,
-    sub_password,
-  } = req.params;
+const storeCredentials = async (req, res) => {
+  const { subscription: subscription_uuid } = req.params;
+  const { sub_username, sub_password } = req.body;
 
-  if (!user_id || !subscription_id || !sub_username || !sub_password)
-    return res.json(400).json({ message: "Something Went Wrong!" });
+  try {
+    const subscription = await prisma.plansOnUsers.findFirstOrThrow({
+      where: {
+        uuid: subscription_uuid,
+      },
+    });
 
-  const user = await prisma.user.findFirstOrThrow({
-    where: {
-      id: parseInt(user_id),
-    },
-  });
+    const user = await prisma.user.findFirstOrThrow({
+      where: {
+        id: subscription.user_id,
+      },
+    });
 
-  const subscription = await prisma.plansOnUsers.findFirstOrThrow({
-    where: {
-      id: parseInt(subscription_id),
-      user_id: parseInt(user_id),
-    },
-    select: { plan: true },
-  });
+    const credentials = await prisma.credentials.create({
+      data: {
+        user_id: user.id,
+        subscription_uuid: subscription.uuid,
+        username: sub_username,
+        password: sub_password,
+      },
+    });
 
-  const sendEmail = await activeSubscriptions(
-    user.email,
-    user.username,
-    subscription.plan.name,
-    sub_username,
-    sub_password
-  );
+    if (credentials) {
+      const redis = new Redis();
 
-  return res.status(201).json({
-    message: "Subscription Activated",
+      await redis.publish(
+        "credentials_stored",
+        JSON.stringify({
+          user_id: user.id,
+          sub_username,
+          sub_password,
+          subscription_uuid,
+        })
+      );
+    }
+
+    return res
+      .status(201)
+      .json({ message: "Credentials Stored Successfully!" });
+  } catch (error) {
+    console.log(error);
+    return res.status(400);
+  }
+};
+
+const subscription_status = async (req, res) => {
+  const { subscription: subscription_uuid } = req.params;
+
+  try {
+    const subscription = await prisma.plansOnUsers.findFirst({
+      where: {
+        uuid: subscription_uuid,
+      },
+    });
+
+    if (!subscription) {
+      return res.json({ status: false });
+    }
+
+    const credentials = await prisma.credentials.findFirst({
+      where: {
+        subscription_uuid: subscription.uuid,
+      },
+    });
+
+    if (credentials) {
+      throw new Error("Something went wrong!");
+    }
+  } catch (error) {
+    return res.json({ status: false });
+  }
+
+  return res.json({
+    status: true,
   });
 };
 
-export { getPlans, purchase, subscribe, trial, active };
+export {
+  getPlans,
+  purchase,
+  subscribe,
+  trial,
+  storeCredentials,
+  subscription_status,
+};
