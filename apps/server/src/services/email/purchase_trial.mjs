@@ -1,7 +1,6 @@
-const generate_template = require("./template");
-const transporter = require("./transporter");
-const { PrismaClient } = require("@prisma/client");
-require("dotenv").config();
+import generate_template from "./template.mjs";
+import transporter from "./transporter.mjs";
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -44,4 +43,4 @@ const purchase_trial = async (user_id, plan_id, subscription_type) => {
   }
 };
 
-module.exports = purchase_trial;
+export default purchase_trial;

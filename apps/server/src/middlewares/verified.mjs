@@ -1,4 +1,4 @@
-const verify = require("../services/email/verification");
+import verify from "../services/email/verification.mjs";
 
 const verified = async (req, res, next) => {
   if (!req.user.verified) {
@@ -18,4 +18,4 @@ const verified = async (req, res, next) => {
   next();
 };
 
-module.exports = verified;
+export default verified;

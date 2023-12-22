@@ -1,4 +1,5 @@
 .todo
 .env
+.vscode
 node_modules
 *.sql

@@ -1,6 +1,10 @@
-const fs = require("fs");
-const handlebars = require("handlebars");
+import { readFileSync } from "fs";
+import handlebars from "handlebars";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
 
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const { compile } = handlebars;
 const templates_locations = {
   credentials: "/templates/credentials.hbs",
   purchase: "/templates/purchase.hbs",
@@ -10,11 +14,11 @@ const templates_locations = {
 
 const generate_template = (template_name, data) => {
   try {
-    const html = fs.readFileSync(
+    const html = readFileSync(
       `${__dirname}/${templates_locations[template_name]}`,
       "utf8"
     );
-    const template = handlebars.compile(html);
+    const template = compile(html);
     const content = template(data);
     return content;
   } catch (error) {
@@ -22,4 +26,4 @@ const generate_template = (template_name, data) => {
   }
 };
 
-module.exports = generate_template;
+export default generate_template;

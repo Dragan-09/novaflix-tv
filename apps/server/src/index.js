@@ -1,16 +1,19 @@
-const express = require("express");
-const morgan = require("morgan");
-const cors = require("cors");
-require("dotenv").config();
+import express, { urlencoded, json } from "express";
+import morgan from "morgan";
+import cors from "cors";
 
 const app = express();
 const port = process.env.APP_PORT;
 
-const auth = require("./routes/auth");
-const channel = require("./routes/channel");
-const category = require("./routes/category");
-const plan = require("./routes/plan");
-const user = require("./routes/user");
+// routes
+import auth from "./routes/auth.mjs";
+import channel from "./routes/channel.mjs";
+import category from "./routes/category.mjs";
+import plan from "./routes/plan.mjs";
+import user from "./routes/user.mjs";
+
+// services
+import sendCredentials from "./services/email/credentials.mjs";
 
 app.use(
   cors({
@@ -19,11 +22,14 @@ app.use(
   })
 );
 app.use(morgan("tiny"));
-app.use(express.urlencoded({ extended: "false" }));
-app.use(express.json());
+app.use(urlencoded({ extended: "false" }));
+app.use(json());
 
 app.use("/api/auth", auth);
 app.use("/api", channel, category, plan);
 app.use("/api/user", user);
 
+sendCredentials();
+
+// app start
 app.listen(port, console.log(`Listening on port ${port}....`));

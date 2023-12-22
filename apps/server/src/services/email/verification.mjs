@@ -1,7 +1,6 @@
-const { PrismaClient } = require("@prisma/client");
-const transporter = require("./transporter");
-const generate_template = require("./template");
-require("dotenv").config();
+import { PrismaClient } from "@prisma/client";
+import transporter from "./transporter.mjs";
+import generate_template from "./template.mjs";
 
 const prisma = new PrismaClient();
 
@@ -51,4 +50,4 @@ const verify = async (user_id) => {
   }
 };
 
-module.exports = verify;
+export default verify;
