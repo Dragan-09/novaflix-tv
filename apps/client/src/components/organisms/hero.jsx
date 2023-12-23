@@ -1,46 +1,57 @@
-import React, { useState, useEffect } from "react";
-import Navbar from "../molecules/navbar";
-import Button from "../atoms/button";
-import CategoryCard from "../../components/molecules/category-box";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay } from "swiper/modules";
-import ChannelCard from "../molecules/channel-box";
-import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
-import { authActions } from "../../features/auth/auth-slice";
-import FreeTrial from "../molecules/free-trial";
+import React, { useState, useEffect } from "react"
+import Navbar from "../molecules/navbar"
+import Button from "../atoms/button"
+import CategoryCard from "../../components/molecules/category-box"
+import { Swiper, SwiperSlide } from "swiper/react"
+import { Autoplay } from "swiper/modules"
+import ChannelCard from "../molecules/channel-box"
+import axios from "axios"
+import { useDispatch, useSelector } from "react-redux"
+import { authActions } from "../../features/auth/auth-slice"
+import FreeTrial from "../molecules/free-trial"
+
+import video from "../../assets/videos/trailer.mp4"
 
 function Hero() {
-  const [loading, setLoading] = useState(true);
-  const [categories, setCategories] = useState([]);
-  const [channels, setChannels] = useState([]);
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  const account = useSelector((state) => state.auth.account);
-  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(true)
+  const [categories, setCategories] = useState([])
+  const [channels, setChannels] = useState([])
+  const isLoggedIn = useSelector(state => state.auth.isLoggedIn)
+  const account = useSelector(state => state.auth.account)
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    console.log(isLoggedIn);
+    console.log(isLoggedIn)
     const getData = async () => {
       try {
         const categories = await axios.get(
-          `${import.meta.env.VITE_API_URL}/categories`
-        );
+          `${import.meta.env.VITE_API_URL}/categories`,
+        )
         const channels = await axios.get(
-          `${import.meta.env.VITE_API_URL}/channels`
-        );
-        setChannels(channels.data.data);
-        setCategories(categories.data.data);
-        setLoading(false);
+          `${import.meta.env.VITE_API_URL}/channels`,
+        )
+        setChannels(channels.data.data)
+        setCategories(categories.data.data)
+        setLoading(false)
       } catch (error) {
-        console.log(error);
+        console.log(error)
       }
-    };
-    getData();
-  }, []);
+    }
+    getData()
+  }, [])
 
   return (
     loading || (
       <div className="hero border-b-2 border-slate-800 dark:border-white w-full h-[calc(100vh-55px)] sm:h-screen sm:min-h-[800px] pt-10 px-0 sm:px-2 lg:px-5 bg-gradient-to-r from-primary to-secondary relative overflow-hidden">
+        <video
+          src={video}
+          className="min-w-full min-h-full absolute right-0 top-0 object-contain"
+          autoPlay
+          muted
+          loop>
+          <source src={video} type="video/mp4" />
+        </video>
+
         <div className="w-full h-full absolute bg-gradient-to-b from-white dark:from-slate-900 to-transparent top-0 left-0 z-0"></div>
         <div className="w-full h-full absolute bg-gradient-to-t from-white dark:from-slate-900 to-transparent top-0 left-0 z-0"></div>
         <div className="container mx-auto h-full z-10 relative">
@@ -69,10 +80,9 @@ function Hero() {
                           authActions.showAccount({
                             normal: true,
                             mobile: true,
-                          })
+                          }),
                         )
-                      }
-                    >
+                      }>
                       My Account
                     </Button>
                   ) : (
@@ -105,9 +115,8 @@ function Hero() {
                       slidesPerView: 5,
                       spaceBetween: 50,
                     },
-                  }}
-                >
-                  {categories.map((category) => {
+                  }}>
+                  {categories.map(category => {
                     return (
                       <SwiperSlide key={category.name}>
                         <CategoryCard
@@ -116,7 +125,7 @@ function Hero() {
                           key={category.name}
                         />
                       </SwiperSlide>
-                    );
+                    )
                   })}
                 </Swiper>
               </div>
@@ -143,9 +152,8 @@ function Hero() {
                     1281: {
                       slidesPerView: 6,
                     },
-                  }}
-                >
-                  {channels.map((channel) => {
+                  }}>
+                  {channels.map(channel => {
                     return (
                       <SwiperSlide key={channel.name}>
                         <ChannelCard
@@ -154,7 +162,7 @@ function Hero() {
                           key={channel.name}
                         />
                       </SwiperSlide>
-                    );
+                    )
                   })}
                 </Swiper>
               </div>
@@ -163,7 +171,7 @@ function Hero() {
         </div>
       </div>
     )
-  );
+  )
 }
 
-export default Hero;
+export default Hero
