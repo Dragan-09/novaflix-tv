@@ -9,6 +9,7 @@ import axios from "axios"
 import { useDispatch, useSelector } from "react-redux"
 import { authActions } from "../../features/auth/auth-slice"
 import FreeTrial from "../molecules/free-trial"
+import config from "../../config"
 
 import video from "../../assets/videos/trailer.mp4"
 
@@ -60,10 +61,10 @@ function Hero() {
             <div className="flex w-full items-center h-1/2 px-10 lg:px-28">
               <div className="description w-full">
                 <p className="capitalize text-5xl sm:text-7xl text-primary font-bold drop-shadow-primary">
-                  TeleVista
+                  {config.app_name}
                 </p>
                 <p className="sm:leading-tight text-md sm:text-5xl md:text-3xl text-black/70 dark:text-gray-50 font-bold pt-2 capitalize">
-                  Explore Infinite Entertainment, Only on Televista.
+                  Explore Infinite Entertainment, Only on {config.app_name}.
                 </p>
                 <p className="dark:text-gray-100 text-gray-600 italic text-xs sm:text-base pt-3 pb-6 font-medium hidden lg:block">
                   Say goodbye to traditional investing and hello to our

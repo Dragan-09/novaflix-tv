@@ -4,6 +4,7 @@ import Button from "../../atoms/button"
 import toast, { Toaster } from "react-hot-toast"
 import axios from "axios"
 import { GoogleLogin, useGoogleLogin } from "@react-oauth/google"
+import FormSeparator from "../../atoms/form-separator"
 
 function RegisterForm() {
   const [first_name, setFirstname] = useState(null)
@@ -106,10 +107,11 @@ function RegisterForm() {
           Register
         </Button>
       </div>
+      <FormSeparator text={"Or sign in with"} />
       <GoogleLogin
-        width={"318"}
-        login_uri={`http://localhost:3307/api/auth/google`}
-        text="signup_with"
+        width={"320"}
+        login_uri={`${import.meta.env.VITE_API_URL}/auth/google`}
+        text="signin"
         size="large"
         logo_alignment="center"
         onSuccess={googleAuth}
