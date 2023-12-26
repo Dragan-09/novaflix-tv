@@ -3,32 +3,19 @@ import { PrismaClient } from "@prisma/client";
 import jwt from "jsonwebtoken";
 import Joi from "joi";
 import verify from "../services/email/verification.mjs";
+import { OAuth2Client } from "google-auth-library";
+// import
 
-const prisma = new PrismaClient({
-  log: [
-    {
-      level: "query",
-    },
-  ],
-});
+// const require = createRequire(import.meta.url);
+// const { PrismaClient } = require("@prisma/client");
+
+const prisma = new PrismaClient();
 const jwt_secret = process.env.JWT_SECRET;
 const now = new Date();
 const { hashSync, compareSync } = bcryptjs;
 
 const register = async (req, res) => {
   const schema = Joi.object({
-    first_name: Joi.string().required().min(3).max(15).messages({
-      "string.empty": "First Name is a required field!",
-      "string.required": "First Name is a required field!",
-      "string.min": "First Name can't be less than {#limit} characters!",
-      "string.max": "First Name can't be nore than {#limit} characters!",
-    }),
-    last_name: Joi.string().required().min(3).max(10).messages({
-      "string.empty": "Last Name is a required field!",
-      "string.required": "Last Name is a required field!",
-      "string.min": "Last Name can't be less than {#limit} characters!",
-      "string.max": "Last Name can't be nore than {#limit} characters!",
-    }),
     username: Joi.string().required().min(5).max(15).messages({
       "string.empty": "Username is a required field!",
       "string.required": "Username is a required field!",
@@ -149,7 +136,7 @@ const login = async (req, res) => {
         jwt_secret,
         {
           expiresIn: "10d",
-        }
+        },
       );
       return res.status(200).json({
         user,
@@ -164,14 +151,68 @@ const login = async (req, res) => {
   }
 };
 
+const google = async (req, res) => {
+  const { credential } = req.body;
+  const client = new OAuth2Client();
+
+  try {
+    const ticket = await client.verifyIdToken({
+      idToken: credential,
+      audience: process.env.GOOGLE_API_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+
+    const email = payload?.email;
+    const username = `g_${payload?.name}`;
+
+    let user = await prisma.user.findFirst({
+      where: { email },
+    });
+
+    if (!user) {
+      user = await prisma.user.create({
+        data: {
+          username,
+          email,
+          password: "",
+          role: "USER",
+          type: "GOOGLE",
+          verified: true,
+        },
+      });
+    }
+
+    const token = jwt.sign(
+      { id: user.id, username: user.username },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "10d",
+      },
+    );
+
+    return res.send({
+      token,
+      data: {
+        username: user.username,
+        id: user.id,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+
+  return res.status(500).json({
+    message: "Something went wrong",
+  });
+};
+
 const account = async (req, res) => {
   const { id, username } = req.user;
   const user = await prisma.user.findFirst({
     where: { id },
     select: {
       username: true,
-      first_name: true,
-      last_name: true,
       verified: true,
       role: true,
       plans: {
@@ -248,4 +289,4 @@ const confirm = async (req, res) => {
   });
 };
 
-export { register, login, account, confirm };
+export { register, login, account, confirm, google };

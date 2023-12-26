@@ -1,5 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 
+// const require = createRequire(import.meta.url);
+// const { PrismaClient } = require("@prisma/client");
+
 const is_admin = async (req, res, next) => {
   const prisma = new PrismaClient();
 

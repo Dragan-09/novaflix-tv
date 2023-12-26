@@ -45,7 +45,7 @@ function Hero() {
       <div className="hero border-b-2 border-slate-800 dark:border-white w-full h-[calc(100vh-55px)] sm:h-screen sm:min-h-[800px] pt-10 px-0 sm:px-2 lg:px-5 bg-gradient-to-r from-primary to-secondary relative overflow-hidden">
         <video
           src={video}
-          className="min-w-full min-h-full absolute right-0 top-0 object-contain"
+          className="min-w-full min-h-full absolute right-0 top-0 object-cover"
           autoPlay
           muted
           loop>

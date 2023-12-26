@@ -2,11 +2,14 @@ import { PrismaClient } from "@prisma/client";
 import transporter from "./transporter.mjs";
 import generate_template from "./template.mjs";
 
+// const require = createRequire(import.meta.url);
+// const { PrismaClient } = require("@prisma/client");
+
 const prisma = new PrismaClient();
 
 const verify = async (user_id) => {
   const oneHourLater = new Date(
-    new Date().getTime() + 60 * 120 * 1000
+    new Date().getTime() + 60 * 120 * 1000,
   ).toISOString();
 
   const user = await prisma.user.findFirstOrThrow({

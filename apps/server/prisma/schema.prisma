@@ -12,12 +12,12 @@ model User {
   username      String    @unique
   email         String    @unique
   password      String  
-  first_name    String  
-  last_name     String
   role          Role      @default(USER)
+  type          Type?
   verified      Boolean   @default(false)
   created_at    DateTime  @default(now())
   updated_at    DateTime  @updatedAt
+  
   plans         PlansOnUsers[]
   verifications UserVerification[]
   Credentials   Credentials[]
@@ -28,6 +28,11 @@ model User {
 enum Role {
   USER
   ADMIN
+}
+
+enum Type {
+  LOCAL
+  GOOGLE
 }
 
 model Plan {
@@ -47,8 +52,9 @@ model Plan {
 model PlansOnUsers {
   id              Int       @id @default(autoincrement())
   uuid            String    @db.Uuid @unique
-  user_id         Int
   plan_id         Int
+  user_id         Int?
+  user_email      String
   status          Status    @default(ON_PROCESS)
   subscription_id String?
   assigned_at     DateTime  @default(now())
@@ -56,7 +62,7 @@ model PlansOnUsers {
   type            SubType   @default(NORMAL)
   credentials     Credentials?
 
-  user User @relation(fields: [user_id], references: [id])
+  user User? @relation(fields: [user_id], references: [id])
   plan Plan @relation(fields: [plan_id], references: [id])
 
   @@map("subscriptions")

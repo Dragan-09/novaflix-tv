@@ -1,6 +1,9 @@
 import { PrismaClient } from "@prisma/client";
 import jwt from "jsonwebtoken";
 
+// const require = createRequire(import.meta.url);
+// const { PrismaClient } = require("@prisma/client");
+
 const prisma = new PrismaClient();
 
 const authentication = async (req, res, next) => {
@@ -13,7 +16,7 @@ const authentication = async (req, res, next) => {
   try {
     const decoded = jwt.verify(
       authorizationToken.split(" ")[1],
-      process.env.JWT_SECRET
+      process.env.JWT_SECRET,
     );
 
     const user = await prisma.user.findFirst({

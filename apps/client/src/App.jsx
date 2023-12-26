@@ -9,6 +9,7 @@ import NotFound from "./pages/404"
 import EmailConfirmPage from "./pages/email-confirm"
 import EmailSent from "./pages/email-sent"
 import UserCredentials from "./pages/user-credentials"
+import { GoogleOAuthProvider } from "@react-oauth/google"
 
 function App() {
   useAuth()
@@ -16,24 +17,26 @@ function App() {
   const isLoggedIn = useSelector(state => state.auth.isLoggedIn)
   const role = useSelector(state => state.auth.account.role)
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="*" element={<NotFound />} />
-        <Route path="/" element={<HomePage />} />
-        {!isLoggedIn && <Route path="/auth/:auth" element={<AuthPage />} />}
-        <Route
-          path="/auth/confirm/:encrypted_string"
-          element={<EmailConfirmPage />}
-        />
-        <Route path="/auth/link-sent" element={<EmailSent />} />
-        {isLoggedIn && role == "ADMIN" && (
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_API_CLIENT_ID}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="*" element={<NotFound />} />
+          <Route path="/" element={<HomePage />} />
+          {!isLoggedIn && <Route path="/auth/:auth" element={<AuthPage />} />}
           <Route
-            path="/admin/user/credentials/:subscription_uuid"
-            element={<UserCredentials />}
+            path="/auth/confirm/:encrypted_string"
+            element={<EmailConfirmPage />}
           />
-        )}
-      </Routes>
-    </BrowserRouter>
+          <Route path="/auth/link-sent" element={<EmailSent />} />
+          {isLoggedIn && role == "ADMIN" && (
+            <Route
+              path="/admin/user/credentials/:subscription_uuid"
+              element={<UserCredentials />}
+            />
+          )}
+        </Routes>
+      </BrowserRouter>
+    </GoogleOAuthProvider>
   )
 }
 

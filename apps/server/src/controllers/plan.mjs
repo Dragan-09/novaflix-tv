@@ -6,6 +6,9 @@ import activeSubscriptions from "../services/email/active_subscription.mjs";
 import { v4 as uuidv4 } from "uuid";
 import Redis from "ioredis";
 
+// const require = createRequire(import.meta.url);
+// const { PrismaClient } = require("@prisma/client");
+
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const prisma = new PrismaClient();
 const now = new Date();
@@ -20,7 +23,7 @@ const getPlans = async (req, res) => {
       plans.map(async (plan) => {
         plan.stripe_price = await stripe.prices.retrieve(plan.price_id);
         return plan;
-      })
+      }),
     );
 
     return res.status(200).json({
@@ -49,36 +52,39 @@ const purchase = async (req, res) => {
       where: { id: parseInt(plan_id) },
     });
 
-    const user = await prisma.user.findFirstOrThrow({
-      where: { id: req.user.id },
-    });
+    const user = req.user
+      ? await prisma.user.findFirstOrThrow({
+          where: { id: req?.user?.id },
+        })
+      : undefined;
 
-    const subscriptions = await prisma.plansOnUsers.findMany({
-      where: {
-        user_id: user.id,
-        AND: [
-          {
-            ends_at: { gt: new Date() },
-          },
-          {
-            NOT: {
-              status: "ENDED",
-            },
-          },
-        ],
-      },
-      orderBy: { ends_at: "desc" },
-    });
+    // const subscriptions = await prisma.plansOnUsers.findMany({
+    //   where: {
+    //     user_id: user ? user.id : undefined,
+    //     AND: [
+    //       {
+    //         ends_at: { gt: new Date() },
+    //       },
+    //       {
+    //         NOT: {
+    //           status: "ENDED",
+    //         },
+    //       },
+    //     ],
+    //   },
+    //   orderBy: { ends_at: "desc" },
+    // });
+    // console.log(subscriptions);
 
-    if (subscriptions.length > 0)
-      return res.status(400).json({
-        message: "You already have an active plan!",
-        sub: subscriptions,
-      });
+    // if (subscriptions.length > 0)
+    //   return res.status(400).json({
+    //     message: "You already have an active plan!",
+    //     sub: subscriptions,
+    //   });
 
     const session = await stripe.checkout.sessions.create({
-      success_url: `${process.env.BACKEND_URL}/api/subscribe/${plan_id}/${user.id}?session_id={CHECKOUT_SESSION_ID}`,
-      customer_email: user.email,
+      success_url: `${process.env.BACKEND_URL}/api/subscribe/${plan_id}?session_id={CHECKOUT_SESSION_ID}`,
+      customer_email: user ? user.email : undefined,
       line_items: [
         {
           price: plan.price_id,
@@ -98,36 +104,46 @@ const purchase = async (req, res) => {
 };
 
 const subscribe = async (req, res) => {
-  const { plan, user } = req.params;
+  const { plan } = req.params;
   const { session_id } = req.query;
-  if (plan && user && session_id) {
-    if (!isNaN(plan) && !isNaN(user) && typeof session_id === "string") {
+  if (plan && session_id) {
+    if (!isNaN(plan) && typeof session_id === "string") {
       try {
         const session = await stripe.checkout.sessions.retrieve(session_id);
+
+        const email = session.customer_details.email;
+
+        const user = await prisma.user.findFirst({
+          where: {
+            email,
+          },
+        });
+
         const subscription = await stripe.subscriptions.retrieve(
-          session.subscription
+          session.subscription,
         );
 
         const manual_subscription = await stripe.subscriptions.update(
           session.subscription,
           {
             cancel_at_period_end: true,
-          }
+          },
         );
 
         const generated_uuid = uuidv4();
         const subscribe = await prisma.plansOnUsers.create({
           data: {
             uuid: generated_uuid,
-            user_id: parseInt(user),
+            user_id: user ? user.id : undefined,
             plan_id: parseInt(plan),
+            user_email: session.customer_details.email,
             status: "ON_PROCESS",
             subscription_id: session.subscription,
             assigned_at: new Date(
-              subscription.current_period_start * 1000
+              subscription.current_period_start * 1000,
             ).toISOString(),
             ends_at: new Date(
-              subscription.current_period_end * 1000
+              subscription.current_period_end * 1000,
             ).toISOString(),
           },
           select: {
@@ -137,17 +153,23 @@ const subscribe = async (req, res) => {
           },
         });
 
-        const sendEmail = await purchase_trial(user, plan, subscribe.type);
+        const sendEmail = await purchase_trial(
+          email,
+          plan,
+          subscribe.type,
+          user?.id,
+        );
 
         const notify = await notifyAdminWithPurchase(
-          user,
+          email,
           subscribe.plan.name,
           subscribe.type,
-          subscribe.uuid
+          subscribe.uuid,
+          user?.id,
         );
 
         return res.redirect(
-          `${process.env.FRONTEND_URL}/?congrats=subscription`
+          `${process.env.FRONTEND_URL}/?congrats=subscription`,
         );
         // return res
         //   .status(200)
@@ -162,11 +184,17 @@ const subscribe = async (req, res) => {
 };
 
 const trial = async (req, res) => {
-  const { id: user } = req.user;
+  const { id: user_id } = req.user;
   try {
+    const user = await prisma.user.findFirst({
+      where: {
+        id: user_id,
+      },
+    });
+
     const subscriptions = await prisma.plansOnUsers.findFirst({
       where: {
-        user_id: user,
+        user_id: user_id,
         ends_at: { gt: new Date() },
       },
       orderBy: { ends_at: "desc" },
@@ -179,7 +207,7 @@ const trial = async (req, res) => {
 
     const trial = await prisma.plansOnUsers.findFirst({
       where: {
-        user_id: user,
+        user_id: user_id,
         type: "TRIAL",
       },
     });
@@ -193,11 +221,12 @@ const trial = async (req, res) => {
     const setTrial = await prisma.plansOnUsers.create({
       data: {
         uuid: generated_uuid,
-        user_id: user,
+        user_id: user_id,
         plan_id: 2,
+        user_email: user.email,
         status: "ON_PROCESS",
         ends_at: new Date(
-          new Date().getTime() + 60 * 60 * 1000 * 24
+          new Date().getTime() + 60 * 60 * 1000 * 24,
         ).toISOString(),
         type: "TRIAL",
       },
@@ -206,13 +235,13 @@ const trial = async (req, res) => {
       },
     });
 
-    const sendEmail = await purchase_trial(user, 2, "TRIAL");
+    const sendEmail = await purchase_trial(user_id, 2, "TRIAL");
 
     const notify = await notifyAdminWithPurchase(
-      user,
+      user_id,
       setTrial.plan.name,
       setTrial.type,
-      generated_uuid
+      generated_uuid,
     );
 
     return res.status(200).json({
@@ -260,7 +289,7 @@ const storeCredentials = async (req, res) => {
           sub_username,
           sub_password,
           subscription_uuid,
-        })
+        }),
       );
     }
 

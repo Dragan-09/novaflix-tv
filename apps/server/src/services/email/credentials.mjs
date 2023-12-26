@@ -1,7 +1,11 @@
 import Redis from "ioredis";
 import transporter from "./transporter.mjs";
 import { PrismaClient } from "@prisma/client";
+import { createRequire } from "module";
 import generate_template from "./template.mjs";
+
+// const require = createRequire(import.meta.url);
+// const { PrismaClient } = require("@prisma/client");
 
 const sendCredentials = async () => {
   const prisma = new PrismaClient();
