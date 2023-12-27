@@ -95,6 +95,12 @@ model Channel {
   @@map("channels")
 }
 
+model Feature {
+  id    Int   @id @default(autoincrement())
+  name  String
+  icon  String
+}
+
 model UserVerification {
   encrypted_string  String @unique @default(uuid())
   user_id           Int

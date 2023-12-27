@@ -85,6 +85,7 @@ const purchase = async (req, res) => {
     const session = await stripe.checkout.sessions.create({
       success_url: `${process.env.BACKEND_URL}/api/subscribe/${plan_id}?session_id={CHECKOUT_SESSION_ID}`,
       customer_email: user ? user.email : undefined,
+      payment_method_types: ["card", "paypal"],
       line_items: [
         {
           price: plan.price_id,

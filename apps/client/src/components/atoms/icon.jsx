@@ -9,6 +9,13 @@ import { VscSignIn } from "react-icons/vsc";
 import { PiEyeClosedLight } from "react-icons/pi";
 import { VscEye } from "react-icons/vsc";
 import { FaChevronRight } from "react-icons/fa";
+import { VscFeedback } from "react-icons/vsc";
+import { BiSupport } from "react-icons/bi";
+import { TbProgressHelp } from "react-icons/tb";
+import { RxUpdate } from "react-icons/rx";
+import { MdOutlineSecurity } from "react-icons/md";
+import { MdOutlineHighQuality } from "react-icons/md";
+import { GiCheckMark } from "react-icons/gi";
 
 function Icon({ height, width, className, icon, type, src, color }) {
   const icons = {
@@ -90,6 +97,41 @@ function Icon({ height, width, className, icon, type, src, color }) {
         <FaChevronRight size={width} color={color} className={className} />
       ),
     },
+    support: {
+      component: <BiSupport size={width} color={color} className={className} />,
+    },
+    help: {
+      component: (
+        <TbProgressHelp size={width} color={color} className={className} />
+      ),
+    },
+    update: {
+      component: <RxUpdate size={width} color={color} className={className} />,
+    },
+    payment: {
+      component: (
+        <MdOutlineSecurity size={width} color={color} className={className} />
+      ),
+    },
+    quality: {
+      component: (
+        <MdOutlineHighQuality
+          size={width}
+          color={color}
+          className={className}
+        />
+      ),
+    },
+    feedback: {
+      component: (
+        <VscFeedback size={width} color={color} className={className} />
+      ),
+    },
+    check: {
+      component: (
+        <GiCheckMark size={width} color={color} className={className} />
+      ),
+    },
   };
   let _icon = icons[icon];
   switch (_icon.type) {
@@ -102,8 +144,7 @@ function Icon({ height, width, className, icon, type, src, color }) {
           viewBox={_icon.viewBox}
           width={width}
           height={height}
-          className={className}
-        >
+          className={className}>
           {_icon.children}
         </svg>
       );
