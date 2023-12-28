@@ -1,21 +1,20 @@
 import React from "react";
 import { IoHome, IoSunny } from "react-icons/io5";
 import { BiSolidCategory } from "react-icons/bi";
-import { HiUserCircle } from "react-icons/hi";
-import { HiHome } from "react-icons/hi";
+import { HiUserCircle, HiHome } from "react-icons/hi";
 import { WiMoonAltFirstQuarter } from "react-icons/wi";
 import { GiPriceTag } from "react-icons/gi";
 import { VscSignIn } from "react-icons/vsc";
 import { PiEyeClosedLight } from "react-icons/pi";
 import { VscEye } from "react-icons/vsc";
-import { FaChevronRight } from "react-icons/fa";
+import { FaChevronRight, FaChevronLeft } from "react-icons/fa";
 import { VscFeedback } from "react-icons/vsc";
 import { BiSupport } from "react-icons/bi";
 import { TbProgressHelp } from "react-icons/tb";
 import { RxUpdate } from "react-icons/rx";
-import { MdOutlineSecurity } from "react-icons/md";
-import { MdOutlineHighQuality } from "react-icons/md";
+import { MdOutlineSecurity, MdOutlineHighQuality } from "react-icons/md";
 import { GiCheckMark } from "react-icons/gi";
+import { FaWhatsapp } from "react-icons/fa";
 
 function Icon({ height, width, className, icon, type, src, color }) {
   const icons = {
@@ -97,6 +96,11 @@ function Icon({ height, width, className, icon, type, src, color }) {
         <FaChevronRight size={width} color={color} className={className} />
       ),
     },
+    left: {
+      component: (
+        <FaChevronLeft size={width} color={color} className={className} />
+      ),
+    },
     support: {
       component: <BiSupport size={width} color={color} className={className} />,
     },
@@ -130,6 +134,11 @@ function Icon({ height, width, className, icon, type, src, color }) {
     check: {
       component: (
         <GiCheckMark size={width} color={color} className={className} />
+      ),
+    },
+    whatsapp: {
+      component: (
+        <FaWhatsapp size={width} color={color} className={className} />
       ),
     },
   };

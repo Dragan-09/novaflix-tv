@@ -5,7 +5,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: "#78C7C7",
+        primary: "#9980FA",
         secondary: "#FFA500",
         active: "#2ecc71",
         process: "#1f75f6",
@@ -26,7 +26,7 @@ export default {
         display: "display .1s ease-in-out alternate",
       },
       dropShadow: {
-        primary: "0px 1px 1px #78C7C7",
+        primary: "0px 1px 1px #9980FA",
       },
     },
   },

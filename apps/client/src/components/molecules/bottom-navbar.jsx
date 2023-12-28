@@ -7,12 +7,10 @@ import { authActions } from "../../features/auth/auth-slice";
 import OutsideClickHandler from "react-outside-click-handler";
 
 function BottomNavbar() {
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
   // const [showBottomAccount, setShowBottomAccount] = useState(false);
-  const showBottomAccount = useSelector(
-    (state) => state.auth.showBottomAccount
-  );
-  const isDarkMode = useSelector((state) => state.mode.isDarkMode);
+  const showBottomAccount = useSelector(state => state.auth.showBottomAccount);
+  const isDarkMode = useSelector(state => state.mode.isDarkMode);
   const [toggleDarkMode] = useTheme();
   const bottomNavbarRef = useRef(null);
   const dispatch = useDispatch();
@@ -21,16 +19,17 @@ function BottomNavbar() {
     username,
     verified,
     plan: current_plan,
-  } = useSelector((state) => state.auth.account);
+  } = useSelector(state => state.auth.account);
 
   const navlinks = [
     { name: "home", icon: "home", link: "/" },
     { name: "categories", icon: "categories", link: "/#pricing" },
-    {
-      name: "mode",
-      icon: isDarkMode == true ? "light" : "dark",
-      onClick: () => toggleDarkMode(),
-    },
+    // {
+    //   name: "mode",
+    //   icon: isDarkMode == true ? "light" : "dark",
+    //   onClick: () => toggleDarkMode(),
+    // },
+    { name: "support", icon: "whatsapp", link: "https://api.whatsapp.com" },
     {
       name: "signin",
       icon: isLoggedIn ? "user" : "signin",
@@ -46,8 +45,7 @@ function BottomNavbar() {
       <OutsideClickHandler
         onOutsideClick={() =>
           dispatch(authActions.hideAccount({ mobile: true }))
-        }
-      >
+        }>
         <div ref={bottomNavbarRef}>
           {showBottomAccount && (
             <UserDropdown
@@ -65,14 +63,13 @@ function BottomNavbar() {
             />
           )}
           <div className="fixed bottom-0 left-0 flex sm:hidden bg-white h-14 w-screen z-20 grid grid-cols-4">
-            {navlinks.map((navlink) => {
+            {navlinks.map(navlink => {
               return (
                 <a
                   className="w-full h-14 flex items-center justify-center p-3"
                   href={navlink.link || null}
                   onClick={navlink.onClick || null}
-                  key={navlink.name}
-                >
+                  key={navlink.name}>
                   <Icon
                     icon={navlink.icon}
                     className="h-full"

@@ -25,10 +25,10 @@ const navlinks = [
 ];
 
 function Navbar() {
-  const isDarkMode = useSelector((state) => state.mode.isDarkMode);
-  const showAccount = useSelector((state) => state.auth.showAccount);
+  const isDarkMode = useSelector(state => state.mode.isDarkMode);
+  const showAccount = useSelector(state => state.auth.showAccount);
   const dispatch = useDispatch();
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
   const navbarRef = useRef(null);
   const [toggleDarkMode] = useTheme();
   const {
@@ -36,7 +36,7 @@ function Navbar() {
     username,
     verified,
     plan: current_plan,
-  } = useSelector((state) => state.auth.account);
+  } = useSelector(state => state.auth.account);
 
   return (
     <div className="navbar hidden md:flex items-center h-[40px] sm:h-[100px] py-0 sm:py-5">
@@ -56,16 +56,14 @@ function Navbar() {
             size="medium"
             style="outline"
             link="/auth/login"
-            className="me-4"
-          >
+            className="me-4">
             Sign in
           </Button>
         ) : (
           <OutsideClickHandler
             onOutsideClick={() =>
               dispatch(authActions.hideAccount({ normal: true }))
-            }
-          >
+            }>
             <div ref={navbarRef} className="relative me-4">
               <Button
                 color={"white"}
@@ -76,10 +74,9 @@ function Navbar() {
                   dispatch(
                     authActions.toggleShowAccount({
                       normal: true,
-                    })
+                    }),
                   )
-                }
-              >
+                }>
                 <span>My Account</span>
               </Button>
               {showAccount && (
@@ -102,7 +99,7 @@ function Navbar() {
             </div>
           </OutsideClickHandler>
         )}
-        <Button
+        {/* <Button
           color="white"
           size="medium"
           style={"filled"}
@@ -114,7 +111,7 @@ function Navbar() {
           ) : (
             <Icon icon={"dark"} width={20} className={"h-[20px]"} />
           )}
-        </Button>
+        </Button> */}
       </div>
     </div>
   );

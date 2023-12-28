@@ -10,7 +10,7 @@ function Li({ icon, children }) {
             icon={icon}
             width={20}
             className={"me-4 mt-1"}
-            color={"rgb(120, 199, 199)"}
+            color={"#9980FA"}
           />
         )}
       </div>
