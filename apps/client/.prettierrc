@@ -1,5 +1,5 @@
 {
-  "semi": false,
+  "semi": true,
   "bracketSameLine": true,
   "arrowParens": "avoid",
   "tabWidth": 2

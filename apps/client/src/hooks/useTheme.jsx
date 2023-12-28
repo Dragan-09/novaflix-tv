@@ -5,8 +5,8 @@ import { darkModeActions } from "../features/dark-mode/dark-mode-slice";
 
 function useTheme() {
   const dispatch = useDispatch();
-  const currentMode = localStorage.getItem("dark-mode");
-  const isDarkMode = useSelector((state) => state.mode.isDarkMode);
+  const currentMode = "dark"; /* localStorage.getItem("dark-mode"); */
+  const isDarkMode = useSelector(state => state.mode.isDarkMode);
 
   const toggleDarkMode = () => {
     if (isDarkMode) {
@@ -20,7 +20,7 @@ function useTheme() {
     }
   };
 
-  useEffect((_) => {
+  useEffect(_ => {
     if (currentMode === "dark") {
       dispatch(darkModeActions.darkMode());
       document.documentElement.classList.add("dark");

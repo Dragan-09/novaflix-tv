@@ -11,6 +11,7 @@ import channel from "./routes/channel.mjs";
 import category from "./routes/category.mjs";
 import plan from "./routes/plan.mjs";
 import user from "./routes/user.mjs";
+import feature from "./routes/feature.mjs";
 
 // services
 import sendCredentials from "./services/email/credentials.mjs";
@@ -19,14 +20,14 @@ app.use(
   cors({
     origin: "*",
     // origin: process.env.FRONTEND_URL,
-  })
+  }),
 );
 app.use(morgan("tiny"));
 app.use(urlencoded({ extended: "false" }));
 app.use(json());
 
 app.use("/api/auth", auth);
-app.use("/api", channel, category, plan);
+app.use("/api", channel, category, plan, feature);
 app.use("/api/user", user);
 
 sendCredentials();
