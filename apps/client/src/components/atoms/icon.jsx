@@ -15,6 +15,8 @@ import { RxUpdate } from "react-icons/rx";
 import { MdOutlineSecurity, MdOutlineHighQuality } from "react-icons/md";
 import { GiCheckMark } from "react-icons/gi";
 import { FaWhatsapp } from "react-icons/fa";
+import { FaCreditCard } from "react-icons/fa";
+import { FaPaypal } from "react-icons/fa";
 
 function Icon({ height, width, className, icon, type, src, color }) {
   const icons = {
@@ -140,6 +142,14 @@ function Icon({ height, width, className, icon, type, src, color }) {
       component: (
         <FaWhatsapp size={width} color={color} className={className} />
       ),
+    },
+    cart: {
+      component: (
+        <FaCreditCard size={width} color={color} className={className} />
+      ),
+    },
+    paypal: {
+      component: <FaPaypal size={width} color={color} className={className} />,
     },
   };
   let _icon = icons[icon];
