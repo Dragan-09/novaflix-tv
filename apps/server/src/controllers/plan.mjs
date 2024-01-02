@@ -5,9 +5,7 @@ import { Stripe } from "stripe";
 import activeSubscriptions from "../services/email/active_subscription.mjs";
 import { v4 as uuidv4 } from "uuid";
 import Redis from "ioredis";
-
-// const require = createRequire(import.meta.url);
-// const { PrismaClient } = require("@prisma/client");
+import axios from "axios";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const prisma = new PrismaClient();
@@ -35,12 +33,91 @@ const getPlans = async (req, res) => {
           image: plan.image,
           price: plan.stripe_price.unit_amount / 100,
           price_description: plan.price_description,
+          features: plan.features,
         };
       }),
     });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ Message: "Something went wrong!" });
+  }
+};
+
+const getPlan = async (req, res) => {
+  let { name: plan_name } = req.params;
+
+  plan_name = plan_name.replace("plan-", "");
+
+  try {
+    const plan = await prisma.plan.findFirstOrThrow({
+      where: {
+        name: plan_name,
+      },
+    });
+
+    const price = await stripe.prices.retrieve(plan.price_id);
+
+    return res.status(200).json({
+      data: {
+        name: plan.name,
+        price: price.unit_amount / 100,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(404).json({
+      message: "No Plan Found!",
+    });
+  }
+};
+
+const paypalCreateOrder = async (req, res) => {
+  const { plan: plan_name } = req.body;
+  console.log(req.body);
+  try {
+    const plan = await prisma.plan.findFirst({
+      where: {
+        name: plan_name,
+      },
+    });
+
+    const price = await stripe.prices.retrieve(plan.price_id);
+
+    const order = await axios.post(
+      "https://api-m.sandbox.paypal.com/v2/checkout/orders",
+      {
+        intent: "CAPTURE",
+        purchase_units: [
+          {
+            amount: {
+              currency_code: "USD",
+              value: `${price.unit_amount / 100}`,
+            },
+          },
+        ],
+        payment_source: {
+          paypal: {
+            experience_context: {
+              user_action: "PAY_NOW",
+              return_url: "https://twitter.com",
+              cancel_url: "https://twitter.com",
+              landing_page: "LOGIN",
+            },
+          },
+        },
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.PAYPAL_ACCESS_TOKEN}`,
+        },
+      },
+    );
+    console.log(order.data);
+    return res.status(200).json({ data: order.data });
+  } catch (error) {
+    console.log(error);
+    return res.status(400);
   }
 };
 
@@ -342,4 +419,6 @@ export {
   trial,
   storeCredentials,
   subscription_status,
+  getPlan,
+  paypalCreateOrder,
 };

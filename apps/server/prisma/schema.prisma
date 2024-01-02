@@ -39,6 +39,7 @@ model Plan {
   id                Int @id @default(autoincrement())
   name              String
   description       String
+  features          String
   price             Float
   price_description String
   price_id          String

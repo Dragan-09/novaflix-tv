@@ -9,18 +9,17 @@ import {
 import Button from "../atoms/button";
 import { useState } from "react";
 import axios from "axios";
-import {
-  PayPalScriptProvider,
-  PayPalButtons,
-  usePayPalScriptReducer,
-} from "@paypal/react-paypal-js";
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+import PaypalWrapper from "../molecules/paypal-wrapper";
+import Icon from "../atoms/icon";
+import { useParams } from "react-router-dom";
 
 // const stripe = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
-function Checkout() {
+function Checkout({ name, price }) {
   const stripe = useStripe();
   const elements = useElements();
   const [clientSecret, setClientSecret] = useState(null);
-  // const [{ options, isPending }, dispatch] = usePayPalScriptReducer();
+  const [showCardPayment, setShowCardPayment] = useState(false);
 
   useEffect(() => {
     const getPaymentIntent = async () => {
@@ -33,6 +32,11 @@ function Checkout() {
     };
     getPaymentIntent();
   }, []);
+
+  const toggleCardPayment = e => {
+    e.preventDefault();
+    setShowCardPayment(!showCardPayment);
+  };
 
   const handleSubmit = async e => {
     e.preventDefault();
@@ -52,87 +56,46 @@ function Checkout() {
     }
   };
 
-  async function createOrder() {
-    // replace this url with your server
-    const response = await fetch(
-      "https://react-paypal-js-storybook.fly.dev/api/paypal/create-order",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        // use the "body" param to optionally pass additional order information
-        // like product ids and quantities
-        body: JSON.stringify({
-          cart: [
-            {
-              sku: "1blwyeo8",
-              quantity: 2,
-            },
-          ],
-        }),
-      },
-    );
-    const order = await response.json();
-    return order.id;
-  }
-  async function onApprove(data) {
-    // replace this url with your server
-    const response = await fetch(
-      "https://react-paypal-js-storybook.fly.dev/api/paypal/capture-order",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          orderID: data.orderID,
-        }),
-      },
-    );
-    const orderData = await response.json();
-  }
-
   return (
-    <Form onSubmit={handleSubmit}>
-      <PayPalScriptProvider
-        deferLoading
-        options={{
-          clientId:
-            "AS7q2S-BtS3Fb1SFyEbySfa1GrM4x8q1Ft1olRkb6yyW0bxHF9ULpAEf-B23n4FBpxQ-XwCQvW9Sz_04",
-          components: "buttons",
-          currency: "USD",
-        }}>
-        {() => {
-          const [{ options, isPending }, dispatch] = usePayPalScriptReducer();
-          console.log("dada");
-          return (
-            <div className="w-full">
-              <PayPalButtons
-                disabled={false}
-                onApprove={onApprove}
-                createOrder={createOrder}
-                // displayOnly={["vaultable"]}
-                style={{
-                  label: "paypal",
-                  color: "silver",
-                  shape: "rect",
-                  layout: "horizontal",
-                }}
-              />
-            </div>
-          );
-        }}
-      </PayPalScriptProvider>
+    <Form
+      onSubmit={handleSubmit}
+      className={"flex items-center justify-center sm:block text-center"}>
+      <div className="product col-span-2 text-center">
+        <div className="name font-semibold text-2xl text-gray-400">
+          {name} <span className="font-normal">Plan</span>
+        </div>
+        <div className="price text-2xl font-light">${price}</div>
+      </div>
       <LinkAuthenticationElement className="col-span-2" />
-      <PaymentElement className="col-span-2" />
-      <Button
-        size={"medium"}
-        color={"primary"}
-        style={"filled"}
-        className={"col-span-2"}>
-        Purchase
-      </Button>
+      <div className="methods col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <button
+          className="w-full h-[40px] bg-primary text-white rounded-[3px] flex items-center justify-center cursor-pointer order-last sm:order-first"
+          onClick={toggleCardPayment}>
+          <Icon icon={"cart"} width={27} />
+        </button>
+        <div>
+          <PayPalScriptProvider
+            options={{
+              clientId: import.meta.env.VITE_PAYPAL_CLIENT_ID,
+              components: "buttons",
+              currency: "USD",
+            }}>
+            <PaypalWrapper plan_name={name} />
+          </PayPalScriptProvider>
+        </div>
+      </div>
+      {showCardPayment && (
+        <div className="card-payment col-span-2 grid grid-cols-2">
+          <PaymentElement className="col-span-2" />
+          <Button
+            size={"medium"}
+            color={"primary"}
+            style={"filled"}
+            className={"col-span-2 mt-2"}>
+            Purchase
+          </Button>
+        </div>
+      )}
     </Form>
   );
 }

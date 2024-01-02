@@ -17,18 +17,18 @@ function FreeTrial() {
         headers: {
           Authorization: localStorage.getItem("Authorization"),
         },
-      }
+      },
     );
 
     new URLSearchParams().set("congrats", "trial");
 
     toast.promise(trial, {
       loading: "Processing",
-      success: (data) => {
+      success: data => {
         refreshAccountUtil(dispatch);
         return data.data.message;
       },
-      error: (error) => {
+      error: error => {
         if (error.response?.status === 400) {
           return error.response?.data?.message;
         }
@@ -47,11 +47,10 @@ function FreeTrial() {
       position="center center"
       trigger={
         <Button style="filled" size="large" color="primary" className="shadow">
-          Get 24 hours free
+          Get Free Trial
         </Button>
-      }
-    >
-      {(close) => (
+      }>
+      {close => (
         <div className="modal w-11/12 sm:w-1/2 bg-white p-8 rounded-lg text-center mx-auto shadow-xl border-primary dark:bg-slate-800">
           <div className="header text-2xl font-bold mb-2 text-primary dark:text-white">
             Free Trial
@@ -70,16 +69,14 @@ function FreeTrial() {
               onClick={() => {
                 try24h();
                 close();
-              }}
-            >
+              }}>
               Start Trial <Icon width={12} icon={"right"} className={"ms-1"} />
             </Button>
             <Button
               style="outline"
               size="medium"
               color="secondary"
-              onClick={close}
-            >
+              onClick={close}>
               Cancel
             </Button>
           </div>

@@ -35,7 +35,7 @@ function App() {
               element={<UserCredentials />}
             />
           )}
-          <Route path="/checkout" element={<CheckoutPage />} />
+          <Route path="/checkout/:plan" element={<CheckoutPage />} />
         </Routes>
       </BrowserRouter>
     </GoogleOAuthProvider>

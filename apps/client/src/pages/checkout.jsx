@@ -1,13 +1,33 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Checkout from "../components/organisms/checkout";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+import NotFound from "./404";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 function CheckoutPage() {
-  return (
+  const [isPending, setIsPending] = useState(true);
+  const { plan: plan_name } = useParams();
+  const [plan, setPlan] = useState({});
+
+  useEffect(() => {
+    const getPlan = async () => {
+      setIsPending(true);
+      try {
+        const plan = await axios.get(
+          `${import.meta.env.VITE_API_URL}/plan/${plan_name}`,
+        );
+        setPlan(plan.data.data);
+        setIsPending(false);
+      } catch (error) {}
+    };
+    getPlan();
+  }, []);
+
+  return !isPending ? (
     <>
       <Elements
         stripe={stripePromise}
@@ -27,10 +47,12 @@ function CheckoutPage() {
           },
         }}>
         <div className="container mx-auto w-full h-screen flex items-center justify-center">
-          <Checkout />
+          <Checkout name={plan.name} price={plan.price} />
         </div>
       </Elements>
     </>
+  ) : (
+    <NotFound />
   );
 }
 
