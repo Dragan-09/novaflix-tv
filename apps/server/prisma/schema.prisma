@@ -51,17 +51,18 @@ model Plan {
 }
 
 model PlansOnUsers {
-  id              Int       @id @default(autoincrement())
-  uuid            String    @db.Uuid @unique
-  plan_id         Int
-  user_id         Int?
-  user_email      String
-  status          Status    @default(ON_PROCESS)
-  subscription_id String?
-  assigned_at     DateTime  @default(now())
-  ends_at         DateTime
-  type            SubType   @default(NORMAL)
-  credentials     Credentials?
+  id                  Int       @id @default(autoincrement())
+  uuid                String    @db.Uuid @unique
+  plan_id             Int
+  user_id             Int?
+  user_email          String
+  status              Status    @default(ON_PROCESS)
+  subscription_id     String?
+  subscription_method Method    @default(STRIPE)
+  assigned_at         DateTime  @default(now())
+  ends_at             DateTime
+  type                SubType   @default(NORMAL)
+  credentials         Credentials?
 
   user User? @relation(fields: [user_id], references: [id])
   plan Plan @relation(fields: [plan_id], references: [id])
@@ -80,6 +81,10 @@ enum SubType {
   TRIAL
 }
 
+enum Method {
+  STRIPE
+  PAYPAL
+}
 model Category {
   id    Int @id @default(autoincrement())
   name  String

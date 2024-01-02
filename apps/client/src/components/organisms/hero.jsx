@@ -1,45 +1,45 @@
-import React, { useState, useEffect } from "react"
-import Navbar from "../molecules/navbar"
-import Button from "../atoms/button"
-import CategoryCard from "../../components/molecules/category-box"
-import { Swiper, SwiperSlide } from "swiper/react"
-import { Autoplay } from "swiper/modules"
-import ChannelCard from "../molecules/channel-box"
-import axios from "axios"
-import { useDispatch, useSelector } from "react-redux"
-import { authActions } from "../../features/auth/auth-slice"
-import FreeTrial from "../molecules/free-trial"
-import config from "../../config"
+import React, { useState, useEffect } from "react";
+import Navbar from "../molecules/navbar";
+import Button from "../atoms/button";
+import CategoryCard from "../../components/molecules/category-box";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay } from "swiper/modules";
+import ChannelCard from "../molecules/channel-box";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { authActions } from "../../features/auth/auth-slice";
+import FreeTrial from "../molecules/free-trial";
+import config from "../../config";
 
-import video from "../../assets/videos/trailer.mp4"
+import video from "../../assets/videos/trailer.mp4";
 
 function Hero() {
-  const [loading, setLoading] = useState(true)
-  const [categories, setCategories] = useState([])
-  const [channels, setChannels] = useState([])
-  const isLoggedIn = useSelector(state => state.auth.isLoggedIn)
-  const account = useSelector(state => state.auth.account)
-  const dispatch = useDispatch()
+  const [loading, setLoading] = useState(true);
+  const [categories, setCategories] = useState([]);
+  const [channels, setChannels] = useState([]);
+  const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
+  const account = useSelector(state => state.auth.account);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log(isLoggedIn)
+    console.log(isLoggedIn);
     const getData = async () => {
       try {
         const categories = await axios.get(
           `${import.meta.env.VITE_API_URL}/categories`,
-        )
+        );
         const channels = await axios.get(
           `${import.meta.env.VITE_API_URL}/channels`,
-        )
-        setChannels(channels.data.data)
-        setCategories(categories.data.data)
-        setLoading(false)
+        );
+        setChannels(channels.data.data);
+        setCategories(categories.data.data);
+        setLoading(false);
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
-    }
-    getData()
-  }, [])
+    };
+    getData();
+  }, []);
 
   return (
     loading || (
@@ -48,6 +48,7 @@ function Hero() {
           src={video}
           className="min-w-full min-h-full absolute right-0 top-0 object-cover"
           autoPlay
+          playsinline
           muted
           loop>
           <source src={video} type="video/mp4" />
@@ -126,7 +127,7 @@ function Hero() {
                           key={category.name}
                         />
                       </SwiperSlide>
-                    )
+                    );
                   })}
                 </Swiper>
               </div>
@@ -163,7 +164,7 @@ function Hero() {
                           key={channel.name}
                         />
                       </SwiperSlide>
-                    )
+                    );
                   })}
                 </Swiper>
               </div>
@@ -172,7 +173,7 @@ function Hero() {
         </div>
       </div>
     )
-  )
+  );
 }
 
-export default Hero
+export default Hero;

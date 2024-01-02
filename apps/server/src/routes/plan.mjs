@@ -7,6 +7,7 @@ import is_admin from "../middlewares/is_admin.mjs";
 import {
   getPlan,
   getPlans,
+  paypalCaptureOrder,
   paypalCreateOrder,
   purchase,
   storeCredentials,
@@ -17,6 +18,7 @@ import {
 
 router.route("/plans").get(getPlans);
 router.route("/plans/create-paypal-order").post(paypalCreateOrder);
+router.route("/plans/capture-paypal-order").post(paypalCaptureOrder);
 router.route("/plan/:id").post(purchase);
 router.route("/plan/:name").get(getPlan);
 router
