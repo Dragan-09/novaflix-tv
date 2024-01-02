@@ -17,20 +17,11 @@ async function createOrder(name) {
 }
 
 async function onApprove(data) {
-  // replace this url with your server
-  const response = await fetch(
-    "https://react-paypal-js-storybook.fly.dev/api/paypal/capture-order",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        orderID: data.orderID,
-      }),
-    },
+  const orderData = await axios.post(
+    `${import.meta.env.VITE_API_URL}/plans/capture-paypal-order`,
+    { orderID: data.orderID },
+    { headers: { "Content-Type": "application/json" } },
   );
-  const orderData = await response.json();
 }
 
 function PaypalWrapper({ plan_name }) {
@@ -39,8 +30,8 @@ function PaypalWrapper({ plan_name }) {
   return (
     <PayPalButtons
       disabled={false}
-      // onApprove={() => onApprove()}
-      createOrder={() => createOrder(plan_name)}
+      onApprove={onApprove}
+      createOrder={(data, action) => createOrder(plan_name)}
       // displayOnly={["vaultable"]}
       style={{
         label: "paypal",

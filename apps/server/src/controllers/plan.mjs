@@ -77,7 +77,7 @@ const paypalCreateOrder = async (req, res) => {
   try {
     const plan = await prisma.plan.findFirst({
       where: {
-        name: plan_name,
+        name: plan_name.toLowerCase(),
       },
     });
 
@@ -118,6 +118,68 @@ const paypalCreateOrder = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(400);
+  }
+};
+
+const paypalCaptureOrder = async (req, res) => {
+  const { orderID: order_id } = req.body;
+  const uuid = uuidv4();
+
+  try {
+    const orderData = await axios.get(
+      `https://api-m.sandbox.paypal.com/v2/checkout/orders/${order_id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.PAYPAL_ACCESS_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+      },
+    );
+
+    const subscribe = await prisma.plansOnUsers.create({
+      data: {
+        uuid,
+        plan_id: 2,
+        user_email: orderData.data.payer.email_address,
+        status: "ON_PROCESS",
+        subscription_id: orderData.id,
+        subscription_method: "PAYPAL",
+        ends_at: new Date().toISOString(),
+        assigned_at: new Date().toISOString(),
+      },
+      select: {
+        user_email: true,
+        plan: true,
+        type: true,
+        user: true,
+        uuid: true,
+        plan_id: true,
+      },
+    });
+
+    const sendEmail = await purchase_trial(
+      subscribe.user_email,
+      subscribe.plan_id,
+      subscribe.type,
+      subscribe.user?.id,
+    );
+
+    const notify = await notifyAdminWithPurchase(
+      subscribe.user_email,
+      subscribe.plan.name,
+      subscribe.type,
+      subscribe.uuid,
+      subscribe.user?.id,
+    );
+
+    return res.status(201).json({
+      message: "Subscribed Successfully!",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Something went wrong!",
+    });
   }
 };
 
@@ -421,4 +483,5 @@ export {
   subscription_status,
   getPlan,
   paypalCreateOrder,
+  paypalCaptureOrder,
 };
