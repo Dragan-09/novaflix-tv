@@ -12,6 +12,7 @@ import category from "./routes/category.mjs";
 import plan from "./routes/plan.mjs";
 import user from "./routes/user.mjs";
 import feature from "./routes/feature.mjs";
+import stripe from "./routes/stripe.mjs";
 
 // services
 import sendCredentials from "./services/email/credentials.mjs";
@@ -29,6 +30,7 @@ app.use(json());
 app.use("/api/auth", auth);
 app.use("/api", channel, category, plan, feature);
 app.use("/api/user", user);
+app.use("/api/stripe", stripe);
 
 sendCredentials();
 

@@ -80,8 +80,9 @@ function HomePage() {
           </Section>
         </div>
         <Section title="Get Yours Now" id="pricing">
-          <div className="px-0 sm:px-5 md:px-10 my-5 md:my-10 w-full 2xl:px-30 relative">
+          <div className="px-0 sm:px-5 my-5 md:my-10 w-full 2xl:px-30 relative">
             <Swiper
+              style={{ overflow: "visible" }}
               modules={isMobile && [EffectCards, Autoplay]}
               autoplay={{ delay: 5000 }}
               effect="cards"
@@ -105,15 +106,22 @@ function HomePage() {
                 },
               }}>
               {plans.map((plan, index) => {
-                const { id, title, description, price, price_description } =
-                  plan;
+                const {
+                  id,
+                  title,
+                  description,
+                  price,
+                  price_description,
+                  features,
+                } = plan;
                 return (
-                  <SwiperSlide key={index}>
+                  <SwiperSlide key={index} style={{ overflow: "visible" }}>
                     <PlanCard
                       key={id}
                       id={id}
                       title={title}
                       description={description}
+                      features={features}
                       price={price}
                       resubdesc={price_description}
                       icon={plan.image}
@@ -125,10 +133,10 @@ function HomePage() {
             </Swiper>
             {isMobile || (
               <div className="pagination">
-                <button className="arrow-left arrow w-[40px] flex items-center justify-center rounded-full aspect-square bg-white/50 cursor-pointer left-5 z-30 absolute top-1/2 disabled:opacity-60">
+                <button className="arrow-left arrow w-[40px] flex items-center justify-center rounded-full aspect-square bg-white/50 cursor-pointer -left-1 z-30 absolute top-1/2 disabled:opacity-60">
                   <Icon icon={"left"} color={"white"} width={20} />
                 </button>
-                <button className="arrow-right arrow w-[40px] flex items-center justify-center rounded-full aspect-square bg-white/50 cursor-pointer right-5 z-30 absolute top-1/2 disabled:opacity-60">
+                <button className="arrow-right arrow w-[40px] flex items-center justify-center rounded-full aspect-square bg-white/50 cursor-pointer -right-1 z-30 absolute top-1/2 disabled:opacity-60">
                   <Icon icon={"right"} color={"white"} width={20} />
                 </button>
               </div>

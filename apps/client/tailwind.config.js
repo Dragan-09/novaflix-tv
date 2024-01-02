@@ -5,13 +5,13 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: "#9980FA",
-        secondary: "#FFA500",
-        active: "#2ecc71",
-        process: "#1f75f6",
+        primary: "#9980FA", // Purple
+        secondary: "#FFA500", // Orange
+        active: "#2ecc71", // Green
+        process: "#1f75f6", // Blue
       },
       fontFamily: {
-        poppins: ["poppins", "Arial"],
+        poppins: ["poppins"],
       },
       backgroundImage: {
         "hero-texture": "url('/images/hero.png')",

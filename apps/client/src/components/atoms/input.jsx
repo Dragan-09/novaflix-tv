@@ -1,10 +1,19 @@
 import React, { useEffect, useState } from "react";
 import Icon from "./icon";
 
-function Input({ placeholder, type, name, color, onChange }) {
+function Input({
+  placeholder,
+  type,
+  name,
+  color,
+  onChange,
+  required,
+  className,
+  ...props
+}) {
   const [show, setShow] = useState(true);
 
-  useEffect((_) => {
+  useEffect(_ => {
     switch (type) {
       case "password":
         setShow(false);
@@ -15,7 +24,7 @@ function Input({ placeholder, type, name, color, onChange }) {
     }
   }, []);
 
-  const showHandler = (_) => {
+  const showHandler = _ => {
     setShow(!show);
   };
 
@@ -29,20 +38,20 @@ function Input({ placeholder, type, name, color, onChange }) {
 
   return (
     <div
-      className={`relative w-full h-full text-sm rounded-md border flex overflow-hidden ${variants.color[color]} dark:text-white dark:border-white`}
-    >
+      className={`relative w-full h-full text-sm rounded-md border flex overflow-hidden ${variants.color[color]} dark:text-white dark:border-white ${className}`}>
       <input
         type={show === true ? "text" : "password"}
         name={name}
-        className="outline-none px-5 py-2 bg-transparent w-full"
+        className={`outline-none px-5 py-2 bg-transparent w-full`}
         placeholder={placeholder}
+        required={required}
         onChange={onChange}
+        {...props}
       />
       {type === "password" ? (
         <span
           className="h-full px-2 bg-slate-100 cursor-pointer flex items-center"
-          onClick={showHandler}
-        >
+          onClick={showHandler}>
           {show ? (
             <Icon width={20} color={"black"} icon={"opened-eye"} />
           ) : (

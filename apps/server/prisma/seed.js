@@ -6,9 +6,11 @@ const main = async () => {
   const plans = await prisma.plan.createMany({
     data: [
       {
-        name: "Basic",
-        description:
+        name: "basic",
+        features:
           "Limited number of channels, Standard Definition (SD) streaming quality, Access to VOD content with restricted library, Single-device streaming, Email support, Limited customer service hours, Ad-supported content",
+        description:
+          "Explore with a month of diverse channels and on-demand content.",
         price: 0,
         price_description: "Pay every 30 days",
         image: "basic",
@@ -16,9 +18,11 @@ const main = async () => {
         price_id: "price_1OKKcPDg6AgIuD6dWT5cbCBX",
       },
       {
-        name: "Standard",
-        description:
+        name: "standard",
+        features:
           "Limited number of channels, Standard Definition (SD) streaming quality, Access to VOD content with restricted library, Single-device streaming, Email support, Limited customer service hours, Ad-supported content",
+        description:
+          "Extended access to more channels and superior streaming quality.",
         price: 0,
         price_description: "Pay every 3 months",
         image: "standard",
@@ -26,9 +30,10 @@ const main = async () => {
         price_id: "price_1OKKcPDg6AgIuD6ds1VeQPP2",
       },
       {
-        name: "Premium",
-        description:
+        name: "premium",
+        features:
           "Limited number of channels, Standard Definition (SD) streaming quality, Access to VOD content with restricted library, Single-device streaming, Email support, Limited customer service hours, Ad-supported content",
+        description: "Six months of expanded channels and HD streaming.",
         price: 0,
         price_description: "Pay every 6 months",
         image: "premium",
@@ -36,9 +41,11 @@ const main = async () => {
         price_id: "price_1OKKcPDg6AgIuD6djN2aDekt",
       },
       {
-        name: "VIP",
-        description:
+        name: "vip",
+        features:
           "Limited number of channels, Standard Definition (SD) streaming quality, Access to VOD content with restricted library, Single-device streaming, Email support, Limited customer service hours, Ad-supported content",
+        description:
+          "Year-long VIP access to vast content and crystal-clear streaming.",
         price: 0,
         price_description: "Pay every year",
         image: "premium",
