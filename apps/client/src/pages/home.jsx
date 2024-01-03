@@ -6,6 +6,7 @@ import PlanCard from "../components/molecules/plan-card";
 import Footer from "../components/molecules/footer";
 import BottomNavbar from "../components/molecules/bottom-navbar";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { Splide, SplideSlide } from "@splidejs/react-splide";
 import SwiperCore from "swiper";
 import { Autoplay, EffectCards, Navigation } from "swiper/modules";
 import { Toaster } from "react-hot-toast";
@@ -14,6 +15,8 @@ import { useWindowSize } from "@uidotdev/usehooks";
 
 import "swiper/css/effect-cards";
 import "swiper/css";
+import "@splidejs/react-splide/css";
+
 import ServiceCard from "../components/molecules/service-box";
 import Title from "../components/atoms/section-title";
 import Features from "../components/organisms/features";
@@ -74,11 +77,96 @@ function HomePage() {
         />
         <BottomNavbar />
         <Hero />
-        <div className="about-us bg-slate-700/20">
-          <Section title={`Welcome to ${config.app_name}`}>
-            <About />
-          </Section>
-        </div>
+        <Section title={"Popular Streams"} className={"container px-20"}>
+          <Splide
+            className="pt-5"
+            aria-label="Movies"
+            options={{
+              type: "slide",
+              rewind: true,
+              perPage: 1,
+              gap: 30,
+              perMove: 1,
+              pagination: false,
+              arrows: false,
+              autoplay: true,
+              interval: 5000,
+              mediaQuery: "min",
+              breakpoints: {
+                768: {
+                  perPage: 2,
+                  perMove: 2,
+                  interval: 3000,
+                },
+                1024: {
+                  perPage: 4,
+                  perMove: 4,
+                },
+              },
+            }}>
+            <SplideSlide className="overflow-hidden">
+              <img
+                className="rounded-xl"
+                src="https://tvmedia4k.com/wp-content/uploads/2023/06/WAPK44GzK0B-q6a93dtl9zirprp4niv02gxqc1qvp287939mm8jgq8.webp"
+                alt=""
+              />
+            </SplideSlide>
+            <SplideSlide className="overflow-hidden">
+              <img
+                className="rounded-xl"
+                src="https://tvmedia4k.com/wp-content/uploads/2023/06/Untitled-design-52-q68u47pa0jb8d9dur9f0ykhpvv2diyqa9uc1rxkcv4.webp"
+                alt=""
+              />
+            </SplideSlide>
+            <SplideSlide className="overflow-hidden">
+              <img
+                className="rounded-xl"
+                src="https://tvmedia4k.com/wp-content/uploads/2023/06/Untitled-design-65-q69b2rr9af49quilj6f0khwgu1phd6lkvti7ycab6o.webp"
+                alt=""
+              />
+            </SplideSlide>
+            <SplideSlide className="overflow-hidden">
+              <img
+                className="rounded-xl"
+                src="https://tvmedia4k.com/wp-content/uploads/2023/06/Untitled-design-56-q69b3ak133u071rahejjyd5opr4tn4o7mejxjvifq8.webp"
+                alt=""
+              />
+            </SplideSlide>
+            <SplideSlide className="overflow-hidden">
+              <img
+                className="rounded-xl"
+                src="https://tvmedia4k.com/wp-content/uploads/2023/06/WAPK44GzK0B-q6a93dtl9zirprp4niv02gxqc1qvp287939mm8jgq8.webp"
+                alt=""
+              />
+            </SplideSlide>
+            <SplideSlide className="overflow-hidden">
+              <img
+                className="rounded-xl"
+                src="https://tvmedia4k.com/wp-content/uploads/2023/06/Untitled-design-52-q68u47pa0jb8d9dur9f0ykhpvv2diyqa9uc1rxkcv4.webp"
+                alt=""
+              />
+            </SplideSlide>
+            <SplideSlide className="overflow-hidden">
+              <img
+                className="rounded-xl"
+                src="https://tvmedia4k.com/wp-content/uploads/2023/06/Untitled-design-65-q69b2rr9af49quilj6f0khwgu1phd6lkvti7ycab6o.webp"
+                alt=""
+              />
+            </SplideSlide>
+            <SplideSlide className="overflow-hidden">
+              <img
+                className="rounded-xl"
+                src="https://tvmedia4k.com/wp-content/uploads/2023/06/Untitled-design-56-q69b3ak133u071rahejjyd5opr4tn4o7mejxjvifq8.webp"
+                alt=""
+              />
+            </SplideSlide>
+          </Splide>
+        </Section>
+        <Section
+          title={`Welcome to ${config.app_name}`}
+          className="about-us bg-slate-700/20">
+          <About />
+        </Section>
         <Section title="Get Yours Now" id="pricing">
           <div className="px-0 sm:px-5 my-5 md:my-10 w-full 2xl:px-30 relative">
             <Swiper

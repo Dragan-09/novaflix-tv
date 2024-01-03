@@ -25,7 +25,14 @@ function Checkout({ name, price }) {
     const getPaymentIntent = async () => {
       const paymentIntent = await axios.post(
         `${import.meta.env.VITE_API_URL}/stripe/create-payment-intent`,
-        {},
+        {
+          plan: name,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
       );
       setClientSecret(paymentIntent.data.clientSecret);
       console.log(paymentIntent.data.clientSecret);
@@ -48,7 +55,7 @@ function Checkout({ name, price }) {
         elements,
         clientSecret,
         confirmParams: {
-          return_url: `${import.meta.env.VITE_BASE_URL}?congrats=subscription`,
+          return_url: `${import.meta.env.VITE_API_URL}/subscribe`,
         },
       });
     } catch (error) {
@@ -73,29 +80,25 @@ function Checkout({ name, price }) {
           onClick={toggleCardPayment}>
           <Icon icon={"cart"} width={27} />
         </button>
-        <div>
-          <PayPalScriptProvider
-            options={{
-              clientId: import.meta.env.VITE_PAYPAL_CLIENT_ID,
-              components: "buttons",
-              currency: "USD",
-            }}>
-            <PaypalWrapper plan_name={name} />
-          </PayPalScriptProvider>
-        </div>
+        <PayPalScriptProvider
+          options={{
+            clientId: import.meta.env.VITE_PAYPAL_CLIENT_ID,
+            components: "buttons",
+            currency: "USD",
+          }}>
+          <PaypalWrapper plan_name={name} />
+        </PayPalScriptProvider>
       </div>
-      {showCardPayment && (
-        <div className="card-payment col-span-2 grid grid-cols-2">
-          <PaymentElement className="col-span-2" />
-          <Button
-            size={"medium"}
-            color={"primary"}
-            style={"filled"}
-            className={"col-span-2 mt-2"}>
-            Purchase
-          </Button>
-        </div>
-      )}
+      <div className="card-payment col-span-2 grid grid-cols-2">
+        <PaymentElement className="col-span-2" />
+        <Button
+          size={"medium"}
+          color={"primary"}
+          style={"filled"}
+          className={"col-span-2 mt-2"}>
+          Purchase
+        </Button>
+      </div>
     </Form>
   );
 }
