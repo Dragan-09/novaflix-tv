@@ -48,7 +48,6 @@ function FreeTrial() {
       className="shadow"
       onClick={() => {
         try24h();
-        close();
       }}>
       Get Free Trial
     </Button>
