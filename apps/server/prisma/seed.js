@@ -14,7 +14,7 @@ const main = async () => {
         price: 0,
         price_description: "month",
         image: "basic",
-        duration_days: 30,
+        duration_months: 1,
         price_id: "price_1OKKcPDg6AgIuD6dWT5cbCBX",
       },
       {
@@ -26,7 +26,7 @@ const main = async () => {
         price: 0,
         price_description: "3 months",
         image: "standard",
-        duration_days: 180,
+        duration_months: 3,
         price_id: "price_1OKKcPDg6AgIuD6ds1VeQPP2",
       },
       {
@@ -37,7 +37,7 @@ const main = async () => {
         price: 0,
         price_description: "6 months",
         image: "premium",
-        duration_days: 365,
+        duration_months: 6,
         price_id: "price_1OKKcPDg6AgIuD6djN2aDekt",
       },
       {
@@ -49,7 +49,7 @@ const main = async () => {
         price: 0,
         price_description: "year",
         image: "premium",
-        duration_days: 180,
+        duration_months: 12,
         price_id: "price_1OSGV8Dg6AgIuD6dgcoNP8hL",
       },
     ],
