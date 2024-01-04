@@ -25,6 +25,7 @@ import config from "../config";
 import Icon from "../components/atoms/icon";
 import Support from "../components/atoms/support";
 import About from "../components/organisms/about";
+import Reviews from "../components/organisms/reviews";
 
 function HomePage() {
   const [loading, setLoading] = useState(true);
@@ -162,11 +163,11 @@ function HomePage() {
             </SplideSlide>
           </Splide>
         </Section>
-        <Section
-          title={`Welcome to ${config.app_name}`}
-          className="about-us bg-slate-700/20">
-          <About />
-        </Section>
+        <div className="bg-slate-700/20">
+          <Section title={`Welcome to ${config.app_name}`} className="about-us">
+            <About />
+          </Section>
+        </div>
         <Section title="Get Yours Now" id="pricing">
           <div className="px-0 sm:px-5 my-5 md:my-10 w-full 2xl:px-30 relative">
             <Swiper
@@ -231,11 +232,15 @@ function HomePage() {
             )}
           </div>
         </Section>
-        <div className="bg-gray-700/20 w-full">
-          <Section title={"Features"} id={"features"}>
+        \
+        <div className="bg-slate-700/20">
+          <Section title={"Features"} id={"features"} className="w-full">
             <Features />
           </Section>
         </div>
+        <Section title={"Add your opinion"}>
+          <Reviews />
+        </Section>
         <Support />
         <Footer />
       </>

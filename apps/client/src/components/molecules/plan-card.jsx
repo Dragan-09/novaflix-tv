@@ -78,7 +78,7 @@ function PlanCard({
           ${price}
         </span>
         <span className="text-sm font-semibold leading-6 text-gray-300">
-          /month
+          /{resubdesc}
         </span>
       </p>
       <a
