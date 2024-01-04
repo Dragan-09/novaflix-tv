@@ -17,10 +17,7 @@ import "swiper/css/effect-cards";
 import "swiper/css";
 import "@splidejs/react-splide/css";
 
-import ServiceCard from "../components/molecules/service-box";
-import Title from "../components/atoms/section-title";
 import Features from "../components/organisms/features";
-import Li from "../components/atoms/li";
 import config from "../config";
 import Icon from "../components/atoms/icon";
 import Support from "../components/atoms/support";
@@ -169,7 +166,7 @@ function HomePage() {
           </Section>
         </div>
         <Section title="Get Yours Now" id="pricing">
-          <div className="px-0 sm:px-5 my-5 md:my-10 w-full 2xl:px-30 relative">
+          <div className="px-5 sm:px-5 my-5 md:my-10 w-full 2xl:px-30 relative">
             <Swiper
               style={{ overflow: "visible" }}
               modules={isMobile && [EffectCards, Autoplay]}
@@ -232,13 +229,12 @@ function HomePage() {
             )}
           </div>
         </Section>
-        \
         <div className="bg-slate-700/20">
           <Section title={"Features"} id={"features"} className="w-full">
             <Features />
           </Section>
         </div>
-        <Section title={"Add your opinion"}>
+        <Section title={"how was our service"}>
           <Reviews />
         </Section>
         <Support />
