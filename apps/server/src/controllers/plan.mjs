@@ -292,7 +292,7 @@ const trial = async (req, res) => {
       },
     });
 
-    const sendEmail = await purchase_trial(user_id, 2, "TRIAL");
+    const sendEmail = await purchase_trial(user.email, 2, "TRIAL", user.id);
 
     const notify = await notifyAdminWithPurchase(
       user_id,
