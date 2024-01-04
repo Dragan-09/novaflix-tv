@@ -41,48 +41,17 @@ function FreeTrial() {
   };
 
   return (
-    <Popup
-      modal
-      nested
-      position="center center"
-      trigger={
-        <Button style="filled" size="large" color="primary" className="shadow">
-          Get Free Trial
-        </Button>
-      }>
-      {close => (
-        <div className="modal w-11/12 sm:w-1/2 bg-white p-8 rounded-lg text-center mx-auto shadow-xl border-primary dark:bg-slate-800">
-          <div className="header text-2xl font-bold mb-2 text-primary dark:text-white">
-            Free Trial
-          </div>
-          <div className="content text-gray-600 text-sm dark:text-gray-400">
-            Welcome to Televista's Free Trial! Immerse yourself in our world of
-            entertainment with unlimited access to premium content for 24 hours.
-            Explore diverse shows, movies, and more hassle-free. No commitments,
-            cancel anytime. Begin your adventure now!
-          </div>
-          <div className="actions mt-5 flex gap-2 justify-center">
-            <Button
-              style="filled"
-              size="medium"
-              color="primary"
-              onClick={() => {
-                try24h();
-                close();
-              }}>
-              Start Trial <Icon width={12} icon={"right"} className={"ms-1"} />
-            </Button>
-            <Button
-              style="outline"
-              size="medium"
-              color="secondary"
-              onClick={close}>
-              Cancel
-            </Button>
-          </div>
-        </div>
-      )}
-    </Popup>
+    <Button
+      style="filled"
+      size="large"
+      color="primary"
+      className="shadow"
+      onClick={() => {
+        try24h();
+        close();
+      }}>
+      Get Free Trial
+    </Button>
   );
 }
 
