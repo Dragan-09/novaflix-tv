@@ -48,7 +48,7 @@ function Hero() {
           src={video}
           className="min-w-full min-h-full absolute right-0 top-0 object-cover"
           autoPlay
-          playsinline
+          playsInline
           muted
           loop>
           <source src={video} type="video/mp4" />
@@ -96,6 +96,7 @@ function Hero() {
             <div className="h-1/2">
               <div className="categories mt-5 px-5 sm:px-10">
                 <Swiper
+                  dir="rtl"
                   modules={[Autoplay]}
                   loop={true}
                   grabCursor={true}

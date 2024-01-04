@@ -9,7 +9,6 @@ import {
   getPlans,
   paypalCaptureOrder,
   paypalCreateOrder,
-  purchase,
   storeCredentials,
   subscribe,
   subscription_status,
@@ -19,7 +18,6 @@ import {
 router.route("/plans").get(getPlans);
 router.route("/plans/create-paypal-order").post(paypalCreateOrder);
 router.route("/plans/capture-paypal-order").post(paypalCaptureOrder);
-router.route("/plan/:id").post(purchase);
 router.route("/plan/:name").get(getPlan);
 router
   .route("/subscription/credentials/:subscription")
@@ -27,7 +25,7 @@ router
 router
   .route("/subscription/status/:subscription")
   .get(authentication, is_admin, subscription_status);
-router.route("/subscribe/:plan/:user?").get(subscribe);
+router.route("/subscribe").get(subscribe);
 router.route("/trial").post(authentication, verified, trial);
 
 export default router;

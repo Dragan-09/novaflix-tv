@@ -1,15 +1,11 @@
 import Redis from "ioredis";
 import transporter from "./transporter.mjs";
 import { PrismaClient } from "@prisma/client";
-import { createRequire } from "module";
 import generate_template from "./template.mjs";
-
-// const require = createRequire(import.meta.url);
-// const { PrismaClient } = require("@prisma/client");
 
 const sendCredentials = async () => {
   const prisma = new PrismaClient();
-  const redis = new Redis();
+  const redis = new Redis(process.env.REDIS_URL || undefined);
 
   redis.subscribe("credentials_stored", (error) => {
     error && console.log(`Something went wrong: ${error}`);
@@ -17,16 +13,22 @@ const sendCredentials = async () => {
     redis.on("message", async (channel, message) => {
       if (channel == "credentials_stored") {
         const userCredentials = JSON.parse(message);
-
+        console.log(userCredentials);
         try {
-          const user = await prisma.user.findFirstOrThrow({
-            where: {
-              id: userCredentials.user_id,
-            },
-          });
+          const user = userCredentials.user_id
+            ? await prisma.user.findFirstOrThrow({
+                where: {
+                  id: userCredentials.user_id,
+                },
+              })
+            : undefined;
+
+          const username = user
+            ? user.username
+            : userCredentials.email.split("@")[0];
 
           const content = generate_template("credentials", {
-            user: { username: user.username },
+            user: { username },
             account: {
               login: userCredentials.sub_username,
               password: userCredentials.sub_password,
@@ -37,7 +39,7 @@ const sendCredentials = async () => {
 
           const sendEmail = await transporter.sendMail({
             from: process.env.MAIL_FROM,
-            to: user.email,
+            to: userCredentials.email,
             subject: `Credentials Reciept`,
             html: content,
           });
