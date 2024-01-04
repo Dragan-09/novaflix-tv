@@ -102,6 +102,7 @@ function HomePage() {
                 },
               },
             }}>
+            {/* Please remove this fucking spagetti code, it's 2024 bro. */}
             <SplideSlide className="overflow-hidden">
               <img
                 className="rounded-xl"
@@ -218,7 +219,7 @@ function HomePage() {
               })}
             </Swiper>
             {isMobile || (
-              <div className="pagination">
+              <div className="pagination xl:hidden">
                 <button className="arrow-left arrow w-[40px] flex items-center justify-center rounded-full aspect-square bg-white/50 cursor-pointer -left-1 z-30 absolute top-1/2 disabled:opacity-60">
                   <Icon icon={"left"} color={"white"} width={20} />
                 </button>
