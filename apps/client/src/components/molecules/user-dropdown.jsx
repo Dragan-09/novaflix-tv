@@ -1,39 +1,41 @@
-import React from "react"
-import dateFormat from "dateformat"
-import Button from "../atoms/button"
-import logoutUtil from "../utils/logout"
+import React from "react";
+import dateFormat from "dateformat";
+import Button from "../atoms/button";
+import logoutUtil from "../utils/logout";
 
 function UserDropdown({ username, current_plan, verified, className }) {
-  username = username.replace("g_", "")
-  const end_date_format = dateFormat(current_plan.end_date, "dd mmm yyyy")
+  username = username.replace("g_", "");
+  const end_date_format = dateFormat(current_plan.end_date, "dd mmm yyyy");
   const diff_days = Math.abs(
     Math.floor((new Date() - new Date(current_plan.end_date)) / 8.64e7),
-  )
-  const handleLogout = logoutUtil()
-  let statusColor, description
-  let isPinging = true
-  let plan_name = `${current_plan.name} Plan`
+  );
+  const handleLogout = logoutUtil();
+  let statusColor, description;
+  let isPinging = true;
+  let plan_name = `${current_plan.name} Plan`;
   switch (current_plan.status) {
     case "ACTIVE":
-      statusColor = "#2ecc71"
-      description = `Ends in ${end_date_format}, ${diff_days} days remaining`
-      break
+      statusColor = "#2ecc71";
+      description = `Ends in ${end_date_format}, ${diff_days} days remaining`;
+      break;
     case "ON_PROCESS":
-      statusColor = "#1f75f6"
-      description = "On Process..."
-      break
+      statusColor = "#1f75f6";
+      description = "On Process...";
+      break;
     default:
-      statusColor = "gray"
-      isPinging = false
-      description = "Check our plans for more infrmation"
-      plan_name = "No Plan Chosen"
+      statusColor = "gray";
+      isPinging = false;
+      description = "Check our plans for more infrmation";
+      plan_name = "No Plan Chosen";
   }
 
   return (
     <div
       className={`sm:w-[300px] bg-white py-2 px-4 sm:rounded-md rounded-t-xl z-20 shadow-lg animate-display fixed bottom-[55px] sm:bottom-auto w-full sm:relative ${className}`}>
       <div className="w-full text-center py-4 border-b border-gray-500/40">
-        <div className="w-full font-bold text-xl h-6">Welcome, {username}!</div>
+        <div className="w-full font-bold text-xl h-6 truncate">
+          Welcome, {username}!
+        </div>
         <div className="w-full text-gray-500 text-sm">
           @{username}{" "}
           {!verified && (
@@ -76,7 +78,7 @@ function UserDropdown({ username, current_plan, verified, className }) {
         </Button>
       </div>
     </div>
-  )
+  );
 }
 
-export default UserDropdown
+export default UserDropdown;

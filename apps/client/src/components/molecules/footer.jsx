@@ -30,12 +30,12 @@ function Footer() {
       </div>
       <hr className="my-5 border-white/50" /> */}
       <div className="px-10 text-slate-300 grid grid-cols-2">
-        <p className="text-center sm:text-left col-span-2 sm:col-span-1">
+        <p className="text-center sm:text-center col-span-2 sm:col-span-2">
           All rights reserved &copy; {date}
         </p>
-        <p className="text-center sm:text-right col-span-2 sm:col-span-1">
+        {/* <p className="text-center sm:text-right col-span-2 sm:col-span-1">
           Made with love by <b>Pipas</b>
-        </p>
+        </p> */}
       </div>
     </div>
   );

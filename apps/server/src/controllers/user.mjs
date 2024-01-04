@@ -220,7 +220,7 @@ const account = async (req, res) => {
         select: {
           ends_at: true,
           status: true,
-          plan: { select: { name: true, duration_days: true } },
+          plan: { select: { name: true, duration_months: true } },
         },
         where: { ends_at: { gt: now } },
       },

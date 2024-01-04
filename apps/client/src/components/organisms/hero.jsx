@@ -77,15 +77,8 @@ function Hero() {
                       style={"filled"}
                       color={"white"}
                       size={"large"}
-                      onClick={() =>
-                        dispatch(
-                          authActions.showAccount({
-                            normal: true,
-                            mobile: true,
-                          }),
-                        )
-                      }>
-                      My Account
+                      link={"#pricing"}>
+                      Buy Now
                     </Button>
                   ) : (
                     <FreeTrial />
