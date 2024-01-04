@@ -19,8 +19,8 @@ const navlinks = [
     url: "https://something.com",
   },
   {
-    name: "About",
-    url: "https://something.com",
+    name: "Register",
+    url: "/auth/register",
   },
 ];
 
