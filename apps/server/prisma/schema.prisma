@@ -44,7 +44,7 @@ model Plan {
   price_description String
   price_id          String
   image             String?
-  duration_days     Int
+  duration_months   Int
 
   users             PlansOnUsers[]
   @@map("plans")

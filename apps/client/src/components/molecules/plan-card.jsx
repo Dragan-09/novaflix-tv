@@ -7,6 +7,7 @@ import parse from "html-react-parser";
 import Li from "../atoms/li";
 import { RadioGroup } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/20/solid";
+import { useNavigate } from "react-router-dom";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -19,34 +20,13 @@ function PlanCard({
   features,
   price,
   resubdesc,
-  icon,
   main,
 }) {
   const [isProcessing, setIsProcessing] = useState(false);
+  const navigate = useNavigate();
 
-  const purchase = async () => {
-    try {
-      setIsProcessing(true);
-      const plan = await axios.post(
-        `${import.meta.env.VITE_API_URL}/plan/${id}`,
-        {},
-        {
-          headers: { Authorization: localStorage.getItem("Authorization") },
-        },
-      );
-      location.href = `/checkout/plan-${title.toLowerCase()}`;
-      // location.href = plan.data.checkout_url;
-    } catch (error) {
-      if (error.response.status === 303) {
-        location.href = "/auth/login";
-      }
-      if (error.response.status === 300) {
-        toast.error(error.response.data.message, { position: "top-center" });
-      }
-      console.log(error);
-    } finally {
-      setIsProcessing(false);
-    }
+  const checkout = () => {
+    navigate(`checkout/${title}`);
   };
 
   return (
@@ -83,7 +63,7 @@ function PlanCard({
       </p>
       <a
         // aria-describedby={tier.id}
-        onClick={purchase}
+        onClick={checkout}
         className={classNames(
           id === 3
             ? "bg-primary/70 text-white shadow-sm hover:bg-primary focus-visible:outline-primary"

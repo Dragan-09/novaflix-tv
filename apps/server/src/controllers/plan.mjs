@@ -93,6 +93,7 @@ const paypalCreateOrder = async (req, res) => {
               currency_code: "USD",
               value: `${price.unit_amount / 100}`,
             },
+            custom_id: plan.id,
           },
         ],
         payment_source: {
@@ -124,6 +125,7 @@ const paypalCreateOrder = async (req, res) => {
 const paypalCaptureOrder = async (req, res) => {
   const { orderID: order_id } = req.body;
   const uuid = uuidv4();
+  const date = new Date();
 
   try {
     const orderData = await axios.get(
@@ -136,15 +138,28 @@ const paypalCaptureOrder = async (req, res) => {
       },
     );
 
+    const plan_id = Number(orderData.data.purchase_units[0].custom_id);
+
+    const plan = await prisma.plan.findFirst({
+      select: {
+        duration_months: true,
+      },
+      where: {
+        id: plan_id,
+      },
+    });
+
     const subscribe = await prisma.plansOnUsers.create({
       data: {
         uuid,
-        plan_id: 2,
+        plan_id: plan_id,
         user_email: orderData.data.payer.email_address,
         status: "ON_PROCESS",
         subscription_id: orderData.id,
         subscription_method: "PAYPAL",
-        ends_at: new Date().toISOString(),
+        ends_at: new Date(
+          date.setMonth(date.getMonth() + plan.duration_months),
+        ).toISOString(),
         assigned_at: new Date().toISOString(),
       },
       select: {
@@ -185,6 +200,7 @@ const paypalCaptureOrder = async (req, res) => {
 
 const subscribe = async (req, res) => {
   const { payment_intent, payment_intent_client_secret } = req.query;
+  const date = new Date();
 
   try {
     const paymentIntent = await stripe.paymentIntents.retrieve(payment_intent);
@@ -194,18 +210,26 @@ const subscribe = async (req, res) => {
     );
 
     const { email } = paymentMethod.billing_details;
-    const { plan } = paymentIntent.metadata;
+    const { plan: plan_id } = paymentIntent.metadata;
+
+    const plan = await prisma.plan.findFirst({
+      where: {
+        id: Number(plan_id),
+      },
+    });
 
     const manual_subscription = await prisma.plansOnUsers.create({
       data: {
         uuid: uuidv4(),
-        plan_id: Number(plan),
+        plan_id: plan.id,
         user_email: email,
         status: "ON_PROCESS",
         subscription_id: "",
         subscription_method: "STRIPE",
         assigned_at: new Date().toISOString(),
-        ends_at: new Date().toISOString(),
+        ends_at: new Date(
+          date.setMonth(date.getMonth() + plan.duration_months),
+        ).toISOString(),
       },
       select: {
         user_email: true,
@@ -233,7 +257,6 @@ const subscribe = async (req, res) => {
     );
 
     return res.redirect(`${process.env.FRONTEND_URL}?congrats=subscription`);
-    return res.status(200).json({ paymentMethod, paymentIntent });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: "Something went wrong!" });
