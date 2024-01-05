@@ -5,7 +5,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import NotFound from "./404";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import Loading from "../components/organisms/Loading";
+import Loading from "../components/organisms/loading";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
