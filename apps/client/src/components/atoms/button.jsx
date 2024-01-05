@@ -24,6 +24,10 @@ function Button({
         outline: "border-white text-white",
         filled: "bg-white text-primary",
       },
+      green: {
+        outline: "border-[#57C18A] text-[#57C18A]",
+        filled: "bg-[#57C18A] text-white hover:bg-white hover:text-[#57C18A]",
+      },
     },
     style: {
       outline: `border rounded-md capitalize font-semibold`,
@@ -46,8 +50,7 @@ function Button({
   return (
     <button
       className={`hover:bg-white hover:text-primary hover:border-white transition-all ease-in-out shadow inline-flex justify-center items-center ${_color} ${_style} ${_size} ${className}`}
-      onClick={onClick}
-    >
+      onClick={onClick}>
       {link ? (
         <a className="w-full" href={link}>
           {children}

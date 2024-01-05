@@ -75,9 +75,10 @@ function Hero() {
                   {isLoggedIn && account.plan ? (
                     <Button
                       style={"filled"}
-                      color={"white"}
+                      color={"green"}
                       size={"large"}
-                      link={"#pricing"}>
+                      link={"#pricing"}
+                      className={"w-[200px]"}>
                       Buy Now
                     </Button>
                   ) : (
