@@ -34,8 +34,8 @@ function PlanCard({
       className={classNames(
         id === 3
           ? "bg-[#1b2335] ring-2 ring-primary"
-          : "ring-1 ring-white/10 bg-slate-900",
-        "rounded-3xl p-8 xl:p-10",
+          : "ring-1 ring-white/10 bg-slate-900 hover:ring-1 hover:ring-gray-500",
+        "rounded-3xl p-8 xl:p-10 group ease-in-out",
       )}>
       <div className="flex items-center justify-between gap-x-4">
         <h3
@@ -57,7 +57,7 @@ function PlanCard({
         <span className="text-4xl font-bold tracking-tight text-white">
           ${price}
         </span>
-        <span className="text-sm font-semibold leading-6 text-gray-300">
+        <span className="text-sm font-semibold leading-6 text-gray-300 group-hover:text-primary">
           /{resubdesc}
         </span>
       </p>

@@ -17,6 +17,9 @@ import { GiCheckMark } from "react-icons/gi";
 import { FaWhatsapp } from "react-icons/fa";
 import { FaCreditCard } from "react-icons/fa";
 import { FaPaypal } from "react-icons/fa";
+import { FaFacebook } from "react-icons/fa";
+import { FaInstagram } from "react-icons/fa";
+import { FaEnvelope } from "react-icons/fa";
 
 function Icon({ height, width, className, icon, type, src, color }) {
   const icons = {
@@ -150,6 +153,21 @@ function Icon({ height, width, className, icon, type, src, color }) {
     },
     paypal: {
       component: <FaPaypal size={width} color={color} className={className} />,
+    },
+    instagram: {
+      component: (
+        <FaFacebook size={width} color={color} className={className} />
+      ),
+    },
+    facebook: {
+      component: (
+        <FaInstagram size={width} color={color} className={className} />
+      ),
+    },
+    envelope: {
+      component: (
+        <FaEnvelope size={width} color={color} className={className} />
+      ),
     },
   };
   let _icon = icons[icon];

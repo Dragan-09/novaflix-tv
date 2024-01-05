@@ -162,11 +162,11 @@ function HomePage() {
           </Splide>
         </Section>
         <div className="bg-slate-700/20">
-          <Section title={`Welcome to ${config.app_name}`} className="about-us">
+          <Section className="about-us">
             <About />
           </Section>
         </div>
-        <Section title="Get Yours Now" id="pricing">
+        <Section title="Choose Your Plan" id="pricing">
           <div className="px-5 sm:px-5 my-5 md:my-10 w-full 2xl:px-30 relative">
             <Swiper
               style={{ overflow: "visible" }}
